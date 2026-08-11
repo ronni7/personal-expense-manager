@@ -1,5 +1,20 @@
-<header>Header placeholder</header>
+<mat-sidenav-container class="min-h-screen">
+  <mat-sidenav mode="side" opened class="w-64">
+    <nav class="flex flex-col gap-1 p-4">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="selected"> Dashboard </a>
+      <!-- <a mat-list-item routerLink="/expenses" routerLinkActive="selected"> Expenses </a>
+      <a mat-list-item routerLink="/budgets" routerLinkActive="selected"> Budgets </a>
+      <a mat-list-item routerLink="/categories" routerLinkActive="selected"> Categories </a> -->
+    </nav>
+  </mat-sidenav>
 
-<main>
-  <router-outlet />
-</main>
+  <mat-sidenav-content>
+    <header class="flex h-16 items-center border-b px-6">
+      <span class="text-xl font-semibold"> Personal Expense Manager </span>
+    </header>
+
+    <main class="p-6">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

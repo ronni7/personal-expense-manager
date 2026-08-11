@@ -1,1 +1,72 @@
-<h1>Dashboard</h1>
+<div class="mx-auto max-w-7xl space-y-6 p-6">
+  <!-- Page header -->
+  <header>
+    <h1 class="text-2xl font-semibold">Dashboard</h1>
+    <p class="mt-1 text-sm text-gray-500">Welcome back! Here's your financial overview.</p>
+  </header>
+
+  <!-- Summary cards -->
+  <section
+    class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+    aria-label="Financial summary"
+  >
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Balance</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="mt-4 text-2xl font-semibold">€4,250</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Expenses</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="mt-4 text-2xl font-semibold">€1,240</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Budget</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="mt-4 text-2xl font-semibold">68%</p>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- Main content -->
+  <section class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <!-- Recent expenses -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Recent expenses</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="flex min-h-48 items-center justify-center">
+          <p class="text-sm text-gray-500">Recent expenses will appear here.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Budget overview -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Budget overview</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="flex min-h-48 items-center justify-center">
+          <p class="text-sm text-gray-500">Budget information will appear here.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>
