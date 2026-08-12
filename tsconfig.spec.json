@@ -3,6 +3,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "lib": ["ES2023.Array", "DOM", "ESNext"],
     "outDir": "./out-tsc/spec",
     "types": ["jasmine"]
   },
