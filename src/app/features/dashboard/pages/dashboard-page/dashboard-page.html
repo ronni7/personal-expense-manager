@@ -1,78 +1,105 @@
-@if (expenseStore.loading()) {
-  <p>Loading...</p>
+@if (dashboardStore.isLoading()) {
+  <p class="text-2xl">Loading...</p>
 }
-<div class="mx-auto max-w-7xl space-y-6 p-6">
-  <!-- Page header -->
-  <header>
-    <h1 class="text-2xl font-semibold">Dashboard</h1>
-    <p class="mt-1 text-sm text-gray-500">Welcome back! Here's your financial overview.</p>
-  </header>
+@if (!dashboardStore.isLoading()) {
+  <div class="mx-auto max-w-7xl space-y-6 p-6">
+    <!-- Page header -->
+    <header>
+      <h1 class="text-2xl font-semibold">Dashboard</h1>
+      <p class="mt-1 text-sm text-gray-500">Welcome back! Here's your financial overview.</p>
+    </header>
 
-  <!-- Summary cards -->
-  <section
-    class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-    aria-label="Financial summary"
-  >
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Balance</mat-card-title>
-      </mat-card-header>
+    <!-- Summary cards -->
+    <section
+      class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      aria-label="Financial summary"
+    >
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Balance</mat-card-title>
+        </mat-card-header>
 
-      <mat-card-content>
-        <p class="mt-4 text-2xl font-semibold">€4,250</p>
-      </mat-card-content>
-    </mat-card>
+        <mat-card-content>
+          <p class="mt-4 text-2xl font-semibold">€4,250</p>
+        </mat-card-content>
+      </mat-card>
 
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Expenses</mat-card-title>
-      </mat-card-header>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Expenses</mat-card-title>
+        </mat-card-header>
 
-      <mat-card-content>
-        <p class="mt-4 text-2xl font-semibold">Expenses: {{ expenseStore.expenseCount() }}</p>
-        <p class="mt-4 text-2xl font-semibold">
-          Total Amount: {{ expenseStore.totalAmountInMinorUnits() }}
-        </p>
-      </mat-card-content>
-    </mat-card>
+        <mat-card-content>
+          <div class="mt-4">
+            <p class="text-2xl font-semibold">
+              {{ dashboardStore.totalAmountInMinorUnits() / 100 | currency: 'PLN' }}
+            </p>
 
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Budget</mat-card-title>
-      </mat-card-header>
+            <p class="mt-1 text-sm text-gray-500">{{ dashboardStore.expenseCount() }} expenses</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-      <mat-card-content>
-        <p class="mt-4 text-2xl font-semibold">68%</p>
-      </mat-card-content>
-    </mat-card>
-  </section>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Budget</mat-card-title>
+        </mat-card-header>
 
-  <!-- Main content -->
-  <section class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-    <!-- Recent expenses -->
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Recent expenses</mat-card-title>
-      </mat-card-header>
+        <mat-card-content>
+          <p class="mt-4 text-2xl font-semibold">68%</p>
+        </mat-card-content>
+      </mat-card>
+    </section>
 
-      <mat-card-content>
-        <div class="flex min-h-48 items-center justify-center">
-          <p class="text-sm text-gray-500">Recent expenses will appear here.</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <!-- Main content -->
+    <section class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <!-- Recent expenses -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Recent expenses</mat-card-title>
+        </mat-card-header>
 
-    <!-- Budget overview -->
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Budget overview</mat-card-title>
-      </mat-card-header>
+        <mat-card-content>
+          <mat-card-content>
+            @if (dashboardStore.recentExpenses().length === 0) {
+              <p class="text-sm text-gray-500">No expenses yet.</p>
+            } @else {
+              <div class="divide-y">
+                @for (expense of dashboardStore.recentExpenses(); track expense.id) {
+                  <div class="flex items-center justify-between py-4">
+                    <div>
+                      <p class="font-medium">
+                        {{ expense.description }}
+                      </p>
 
-      <mat-card-content>
-        <div class="flex min-h-48 items-center justify-center">
-          <p class="text-sm text-gray-500">Budget information will appear here.</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </section>
-</div>
+                      <p class="text-sm text-gray-500">
+                        {{ expense.category?.name ?? 'Unknown category' }}
+                      </p>
+                    </div>
+
+                    <span class="font-medium">
+                      {{ expense.amountInMinorUnits / 100 | currency: expense.currency }}
+                    </span>
+                  </div>
+                }
+              </div>
+            }
+          </mat-card-content>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Budget overview -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Budget overview</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="flex min-h-48 items-center justify-center">
+            <p class="text-sm text-gray-500">Budget information will appear here.</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </section>
+  </div>
+}
