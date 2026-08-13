@@ -1,91 +1,102 @@
 @if (dashboardStore.isLoading()) {
-  <p class="text-2xl">Loading...</p>
+  <p id="dashboardPageLoadingText" class="text-2xl">Loading...</p>
 }
 @if (!dashboardStore.isLoading()) {
-  <div class="mx-auto max-w-7xl space-y-6 p-6">
+  <div id="dashboardPageContainer" class="mx-auto max-w-7xl space-y-6 p-6">
     <!-- Page header -->
-    <header>
-      <h1 class="text-2xl font-semibold">Dashboard</h1>
-      <p class="mt-1 text-sm text-gray-500">Welcome back! Here's your financial overview.</p>
+    <header id="dashboardPageHeader">
+      <h1 id="dashboardPageTitle" class="text-2xl font-semibold">Dashboard</h1>
+      <p id="dashboardPageSubtitle" class="mt-1 text-sm text-gray-500">
+        Welcome back! Here's your financial overview.
+      </p>
     </header>
 
     <!-- Summary cards -->
     <section
+      id="dashboardPageSummarySection"
       class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
       aria-label="Financial summary"
     >
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Balance</mat-card-title>
+      <mat-card id="dashboardPageBalanceCard">
+        <mat-card-header id="dashboardPageBalanceCardHeader">
+          <mat-card-title id="dashboardPageBalanceTitle">Balance</mat-card-title>
         </mat-card-header>
 
-        <mat-card-content>
-          <p class="mt-4 text-2xl font-semibold">
+        <mat-card-content id="dashboardPageBalanceCardContent">
+          <p id="dashboardPageBalanceAmount" class="mt-4 text-2xl font-semibold">
             {{ dashboardStore.balance() / 100 | currency: 'PLN' }}
           </p>
-          <p class="mt-4 text-xl font-semibold text-green-500">
+          <p id="dashboardPageIncomeTotalAmount" class="mt-4 text-xl font-semibold text-green-500">
             {{ dashboardStore.incomeTotal() / 100 | currency: 'PLN' }}
           </p>
-          <p class="mt-4 text-xl font-semibold text-red-500">
+          <p id="dashboardPageExpenseTotalAmount" class="mt-4 text-xl font-semibold text-red-500">
             {{ dashboardStore.expenseTotal() / 100 | currency: 'PLN' }}
           </p>
         </mat-card-content>
       </mat-card>
 
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Expenses</mat-card-title>
+      <mat-card id="dashboardPageExpensesCard">
+        <mat-card-header id="dashboardPageExpensesCardHeader">
+          <mat-card-title id="dashboardPageExpensesTitle">Expenses</mat-card-title>
         </mat-card-header>
 
-        <mat-card-content>
-          <div class="mt-4">
-            <p class="text-2xl font-semibold text-red-500">
+        <mat-card-content id="dashboardPageExpensesCardContent">
+          <div id="dashboardPageExpensesDiv" class="mt-4">
+            <p id="dashboardPageTotalExpensesAmount" class="text-2xl font-semibold text-red-500">
               {{ dashboardStore.totalExpensesAmountInMinorUnits() / 100 | currency: 'PLN' }}
             </p>
 
-            <p class="mt-1 text-sm text-gray-500">{{ dashboardStore.expenseCount() }} expenses</p>
+            <p id="dashboardPageExpenseCount" class="mt-1 text-sm text-gray-500">
+              {{ dashboardStore.expenseCount() }} expenses
+            </p>
           </div>
         </mat-card-content>
       </mat-card>
 
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Budget</mat-card-title>
+      <mat-card id="dashboardPageBudgetCard">
+        <mat-card-header id="dashboardPageBudgetCardHeader">
+          <mat-card-title id="dashboardPageBudgetTitle">Budget</mat-card-title>
         </mat-card-header>
 
-        <mat-card-content>
-          <p class="mt-4 text-2xl font-semibold">68%</p>
+        <mat-card-content id="dashboardPageBudgetCardContent">
+          <p id="dashboardPageBudgetPercentage" class="mt-4 text-2xl font-semibold">68%</p>
         </mat-card-content>
       </mat-card>
     </section>
 
     <!-- Main content -->
-    <section class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <section id="dashboardPageMainSection" class="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <!-- Recent expenses -->
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Recent expenses</mat-card-title>
+      <mat-card id="dashboardPageRecentExpensesCard">
+        <mat-card-header id="dashboardPageRecentExpensesCardHeader">
+          <mat-card-title id="dashboardPageRecentExpensesTitle">Recent expenses</mat-card-title>
         </mat-card-header>
 
-        <mat-card-content>
-          <mat-card-content>
+        <mat-card-content id="dashboardPageRecentExpensesCardContent">
+          <mat-card-content id="dashboardPageRecentExpensesInnerContent">
             @if (dashboardStore.recentExpenses().length === 0) {
-              <p class="text-sm text-gray-500">No expenses yet.</p>
+              <p id="dashboardPageNoExpensesText" class="text-sm text-gray-500">No expenses yet.</p>
             } @else {
-              <div class="divide-y">
+              <div id="dashboardPageExpensesList" class="divide-y">
                 @for (expense of dashboardStore.recentExpenses(); track expense.id) {
-                  <div class="flex items-center justify-between py-4">
-                    <div>
-                      <p class="font-medium">
+                  <div
+                    id="dashboardPageExpenseItem-{{ expense.id }}"
+                    class="flex items-center justify-between py-4"
+                  >
+                    <div id="dashboardPageExpenseDetails-{{ expense.id }}">
+                      <p id="dashboardPageExpenseDescription-{{ expense.id }}" class="font-medium">
                         {{ expense.description }}
                       </p>
 
-                      <p class="text-sm text-gray-500">
+                      <p
+                        id="dashboardPageExpenseCategory-{{ expense.id }}"
+                        class="text-sm text-gray-500"
+                      >
                         {{ expense.category?.name ?? 'Unknown category' }}
                       </p>
                     </div>
 
-                    <span class="font-medium">
+                    <span id="dashboardPageExpenseAmount-{{ expense.id }}" class="font-medium">
                       {{ expense.amountInMinorUnits / 100 | currency: expense.currency }}
                     </span>
                   </div>
@@ -97,14 +108,19 @@
       </mat-card>
 
       <!-- Budget overview -->
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Budget overview</mat-card-title>
+      <mat-card id="dashboardPageBudgetOverviewCard">
+        <mat-card-header id="dashboardPageBudgetOverviewCardHeader">
+          <mat-card-title id="dashboardPageBudgetOverviewTitle">Budget overview</mat-card-title>
         </mat-card-header>
 
-        <mat-card-content>
-          <div class="flex min-h-48 items-center justify-center">
-            <p class="text-sm text-gray-500">Budget information will appear here.</p>
+        <mat-card-content id="dashboardPageBudgetOverviewCardContent">
+          <div
+            id="dashboardPageBudgetOverviewDiv"
+            class="flex min-h-48 items-center justify-center"
+          >
+            <p id="dashboardPageBudgetOverviewText" class="text-sm text-gray-500">
+              Budget information will appear here.
+            </p>
           </div>
         </mat-card-content>
       </mat-card>
