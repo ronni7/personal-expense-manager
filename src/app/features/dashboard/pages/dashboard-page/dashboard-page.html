@@ -1,7 +1,11 @@
 @if (dashboardStore.isLoading()) {
   <p id="dashboardPageLoadingText" class="text-2xl">Loading...</p>
-}
-@if (!dashboardStore.isLoading()) {
+} @else if (dashboardStore.error()) {
+  <p id="dashboardPageErrorText" class="text-2xl text-red-500">
+    {{ dashboardStore.error() }}
+  </p>
+} @else {
+  <div class="mx-auto max-w-7xl space-y-6 p-6">...</div>
   <div id="dashboardPageContainer" class="mx-auto max-w-7xl space-y-6 p-6">
     <!-- Page header -->
     <header id="dashboardPageHeader">

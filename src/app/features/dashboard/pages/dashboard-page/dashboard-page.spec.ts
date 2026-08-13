@@ -177,6 +177,17 @@ describe('DashboardPage', () => {
     expect(errorEl).toBeTruthy();
     expect(errorEl.nativeElement.textContent).toContain('Failed to load expenses');
   });
+  it('should display error when expenses loading fails', () => {
+    expensesStoreMock.error.set('Failed to load expenses');
+    expensesStoreMock.loading.set(false);
+
+    fixture.detectChanges();
+
+    const errorEl = fixture.debugElement.query(By.css('#dashboardPageErrorText'));
+
+    expect(errorEl).toBeTruthy();
+    expect(errorEl.nativeElement.textContent).toContain('Failed to load expenses');
+  });
   it('should display error when categories loading fails', () => {
     categoriesStoreMock.error.set('Failed to load categories');
     categoriesStoreMock.loading.set(false);
@@ -187,5 +198,26 @@ describe('DashboardPage', () => {
 
     expect(errorEl).toBeTruthy();
     expect(errorEl.nativeElement.textContent).toContain('Failed to load categories');
+  });
+  it('should not display dashboard content when an error occurs', () => {
+    expensesStoreMock.error.set('Failed to load expenses');
+    expensesStoreMock.loading.set(false);
+
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('#dashboardPageSummarySection'))).toBeNull();
+
+    expect(fixture.debugElement.query(By.css('#dashboardPageErrorText'))).toBeTruthy();
+  });
+
+  it('should display loading state instead of error while loading', () => {
+    expensesStoreMock.loading.set(true);
+    expensesStoreMock.error.set('Failed to load expenses');
+
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('#dashboardPageLoadingText'))).toBeTruthy();
+
+    expect(fixture.debugElement.query(By.css('#dashboardPageErrorText'))).toBeNull();
   });
 });
