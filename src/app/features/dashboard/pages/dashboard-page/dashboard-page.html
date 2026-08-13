@@ -1,11 +1,10 @@
 @if (dashboardStore.isLoading()) {
   <p id="dashboardPageLoadingText" class="text-2xl">Loading...</p>
-} @else if (dashboardStore.error()) {
+} @else if (dashboardStore.error(); as error) {
   <p id="dashboardPageErrorText" class="text-2xl text-red-500">
-    {{ dashboardStore.error() }}
+    {{ error }}
   </p>
 } @else {
-  <div class="mx-auto max-w-7xl space-y-6 p-6">...</div>
   <div id="dashboardPageContainer" class="mx-auto max-w-7xl space-y-6 p-6">
     <!-- Page header -->
     <header id="dashboardPageHeader">
@@ -77,37 +76,37 @@
         </mat-card-header>
 
         <mat-card-content id="dashboardPageRecentExpensesCardContent">
-          <mat-card-content id="dashboardPageRecentExpensesInnerContent">
-            @if (dashboardStore.recentExpenses().length === 0) {
-              <p id="dashboardPageNoExpensesText" class="text-sm text-gray-500">No expenses yet.</p>
-            } @else {
-              <div id="dashboardPageExpensesList" class="divide-y">
-                @for (expense of dashboardStore.recentExpenses(); track expense.id) {
-                  <div
-                    id="dashboardPageExpenseItem-{{ expense.id }}"
-                    class="flex items-center justify-between py-4"
-                  >
-                    <div id="dashboardPageExpenseDetails-{{ expense.id }}">
-                      <p id="dashboardPageExpenseDescription-{{ expense.id }}" class="font-medium">
-                        {{ expense.description }}
-                      </p>
+          @let recentExpenses = dashboardStore.recentExpenses();
 
-                      <p
-                        id="dashboardPageExpenseCategory-{{ expense.id }}"
-                        class="text-sm text-gray-500"
-                      >
-                        {{ expense.category?.name ?? 'Unknown category' }}
-                      </p>
-                    </div>
+          @if (recentExpenses.length === 0) {
+            <p id="dashboardPageNoExpensesText" class="text-sm text-gray-500">No expenses yet.</p>
+          } @else {
+            <div id="dashboardPageExpensesList" class="divide-y">
+              @for (expense of recentExpenses; track expense.id) {
+                <div
+                  id="dashboardPageExpenseItem-{{ expense.id }}"
+                  class="flex items-center justify-between py-4"
+                >
+                  <div id="dashboardPageExpenseDetails-{{ expense.id }}">
+                    <p id="dashboardPageExpenseDescription-{{ expense.id }}" class="font-medium">
+                      {{ expense.description }}
+                    </p>
 
-                    <span id="dashboardPageExpenseAmount-{{ expense.id }}" class="font-medium">
-                      {{ expense.amountInMinorUnits / 100 | currency: expense.currency }}
-                    </span>
+                    <p
+                      id="dashboardPageExpenseCategory-{{ expense.id }}"
+                      class="text-sm text-gray-500"
+                    >
+                      {{ expense.category?.name ?? 'Unknown category' }}
+                    </p>
                   </div>
-                }
-              </div>
-            }
-          </mat-card-content>
+
+                  <span id="dashboardPageExpenseAmount-{{ expense.id }}" class="font-medium">
+                    {{ expense.amountInMinorUnits / 100 | currency: expense.currency }}
+                  </span>
+                </div>
+              }
+            </div>
+          }
         </mat-card-content>
       </mat-card>
 
