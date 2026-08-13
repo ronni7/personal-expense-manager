@@ -26,9 +26,25 @@ export const ExpensesStore = signalStore(
   withComputed(({ expenses }) => ({
     expenseCount: computed(() => expenses().length),
 
-    totalAmountInMinorUnits: computed(() =>
+    expenseTotal: computed(() =>
+      expenses()
+        .filter((expense) => expense.amountInMinorUnits > 0)
+        .reduce((total, expense) => total + expense.amountInMinorUnits, 0),
+    ),
+
+    incomeTotal: computed(() =>
+      expenses()
+        .filter((expense) => expense.amountInMinorUnits < 0)
+        .reduce((total, expense) => total + Math.abs(expense.amountInMinorUnits), 0),
+    ),
+    totalExpensesAmountInMinorUnits: computed(() =>
       expenses().reduce((total, expense) => total + expense.amountInMinorUnits, 0),
     ),
+  })),
+  withComputed((store) => ({
+    balance: computed(() => {
+      return store.incomeTotal() - store.expenseTotal();
+    }),
   })),
   withMethods((store, expensesApi = inject(ExpensesApiService)) => ({
     loadExpenses: rxMethod<void>(

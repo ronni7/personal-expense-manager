@@ -118,7 +118,7 @@ describe('ExpensesStore', () => {
     });
 
     expect(store.expenseCount()).toBe(3);
-    expect(store.totalAmountInMinorUnits()).toBe(18698);
+    expect(store.totalExpensesAmountInMinorUnits()).toBe(18698);
   });
 
   it('should recalculate derived values when expenses change', () => {
@@ -140,7 +140,7 @@ describe('ExpensesStore', () => {
     });
 
     expect(store.expenseCount()).toBe(1);
-    expect(store.totalAmountInMinorUnits()).toBe(1000);
+    expect(store.totalExpensesAmountInMinorUnits()).toBe(1000);
 
     patchState(unprotected(store), {
       expenses: [
@@ -168,7 +168,7 @@ describe('ExpensesStore', () => {
     });
 
     expect(store.expenseCount()).toBe(2);
-    expect(store.totalAmountInMinorUnits()).toBe(3500);
+    expect(store.totalExpensesAmountInMinorUnits()).toBe(3500);
   });
 
   it('should load expenses from the API', () => {
@@ -278,7 +278,7 @@ describe('ExpensesStore', () => {
 
     expect(store.expenses()).toEqual([]);
     expect(store.expenseCount()).toBe(0);
-    expect(store.totalAmountInMinorUnits()).toBe(0);
+    expect(store.totalExpensesAmountInMinorUnits()).toBe(0);
     expect(store.loading()).toBe(false);
     expect(store.error()).toBeNull();
   });
@@ -295,7 +295,7 @@ describe('ExpensesStore', () => {
     response$.complete();
 
     expect(store.expenses()).toEqual(negativeExpenses);
-    expect(store.totalAmountInMinorUnits()).toBe(-1000);
+    expect(store.totalExpensesAmountInMinorUnits()).toBe(-1000);
     expect(store.loading()).toBe(false);
     expect(store.error()).toBeNull();
   });

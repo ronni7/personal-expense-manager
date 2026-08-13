@@ -22,8 +22,13 @@ export const DashboardStore = signalStore(
           null,
       })),
     ),
-    totalAmountInMinorUnits: computed(() => expensesStore.totalAmountInMinorUnits()),
+    totalExpensesAmountInMinorUnits: computed(() =>
+      expensesStore.totalExpensesAmountInMinorUnits(),
+    ),
+    expenseTotal: computed(() => expensesStore.expenseTotal()),
+    incomeTotal: computed(() => expensesStore.incomeTotal()),
     expenseCount: computed(() => expensesStore.expenses().length),
+    balance: computed(() => expensesStore.incomeTotal() - expensesStore.expenseTotal()),
   })),
 
   withComputed((store) => ({

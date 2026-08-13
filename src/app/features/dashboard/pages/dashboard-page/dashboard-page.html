@@ -20,7 +20,15 @@
         </mat-card-header>
 
         <mat-card-content>
-          <p class="mt-4 text-2xl font-semibold">€4,250</p>
+          <p class="mt-4 text-2xl font-semibold">
+            {{ dashboardStore.balance() / 100 | currency: 'PLN' }}
+          </p>
+          <p class="mt-4 text-xl font-semibold text-green-500">
+            {{ dashboardStore.incomeTotal() / 100 | currency: 'PLN' }}
+          </p>
+          <p class="mt-4 text-xl font-semibold text-red-500">
+            {{ dashboardStore.expenseTotal() / 100 | currency: 'PLN' }}
+          </p>
         </mat-card-content>
       </mat-card>
 
@@ -31,8 +39,8 @@
 
         <mat-card-content>
           <div class="mt-4">
-            <p class="text-2xl font-semibold">
-              {{ dashboardStore.totalAmountInMinorUnits() / 100 | currency: 'PLN' }}
+            <p class="text-2xl font-semibold text-red-500">
+              {{ dashboardStore.totalExpensesAmountInMinorUnits() / 100 | currency: 'PLN' }}
             </p>
 
             <p class="mt-1 text-sm text-gray-500">{{ dashboardStore.expenseCount() }} expenses</p>
