@@ -13,7 +13,7 @@ interface ExpensesState {
 }
 
 const initialState: ExpensesState = {
-  expenses: [],
+  expenses: [] as Expense[],
   loading: false,
   error: null,
 };
