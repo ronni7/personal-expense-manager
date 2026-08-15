@@ -1,6 +1,6 @@
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { By } from '@angular/platform-browser';
 
 import { DashboardPage } from './dashboard-page';
@@ -67,11 +67,11 @@ describe('DashboardPage', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  test('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display loading state while dashboard data is loading', () => {
+  test('should display loading state while dashboard data is loading', () => {
     expensesStoreMock.loading.set(true);
 
     fixture.detectChanges();
@@ -80,7 +80,7 @@ describe('DashboardPage', () => {
     expect(fixture.nativeElement.textContent).not.toContain('Financial summary');
   });
 
-  it('should display dashboard content when data is loaded', () => {
+  test('should display dashboard content when data is loaded', () => {
     expensesStoreMock.loading.set(false);
     fixture.detectChanges();
 
@@ -103,7 +103,7 @@ describe('DashboardPage', () => {
     );
   });
 
-  it('should display financial summary values', () => {
+  test('should display financial summary values', () => {
     expensesStoreMock.loading.set(false);
     expensesStoreMock.balance.set(38_000);
     expensesStoreMock.incomeTotal.set(50_000);
@@ -124,7 +124,7 @@ describe('DashboardPage', () => {
     expect(countEl.nativeElement.textContent).toContain('3 expenses');
   });
 
-  it('should display recent expenses when available', () => {
+  test('should display recent expenses when available', () => {
     expensesStoreMock.expenses.set([
       {
         id: '1',
@@ -156,7 +156,7 @@ describe('DashboardPage', () => {
     expect(amountEl.nativeElement.textContent).toContain('45.99');
   });
 
-  it('should display empty state when there are no recent expenses', () => {
+  test('should display empty state when there are no recent expenses', () => {
     expensesStoreMock.expenses.set([]);
     categoriesStoreMock.categories.set([]);
     expensesStoreMock.loading.set(false);
@@ -166,7 +166,7 @@ describe('DashboardPage', () => {
     expect(noExpensesEl.nativeElement.textContent).toContain('No expenses yet.');
   });
 
-  it('should display error when expenses loading fails', () => {
+  test('should display error when expenses loading fails', () => {
     expensesStoreMock.error.set('Failed to load expenses');
     expensesStoreMock.loading.set(false);
 
@@ -177,7 +177,7 @@ describe('DashboardPage', () => {
     expect(errorEl).toBeTruthy();
     expect(errorEl.nativeElement.textContent).toContain('Failed to load expenses');
   });
-  it('should display error when expenses loading fails', () => {
+  test('should display error when expenses loading fails', () => {
     expensesStoreMock.error.set('Failed to load expenses');
     expensesStoreMock.loading.set(false);
 
@@ -188,7 +188,7 @@ describe('DashboardPage', () => {
     expect(errorEl).toBeTruthy();
     expect(errorEl.nativeElement.textContent).toContain('Failed to load expenses');
   });
-  it('should display error when categories loading fails', () => {
+  test('should display error when categories loading fails', () => {
     categoriesStoreMock.error.set('Failed to load categories');
     categoriesStoreMock.loading.set(false);
 
@@ -199,7 +199,7 @@ describe('DashboardPage', () => {
     expect(errorEl).toBeTruthy();
     expect(errorEl.nativeElement.textContent).toContain('Failed to load categories');
   });
-  it('should not display dashboard content when an error occurs', () => {
+  test('should not display dashboard content when an error occurs', () => {
     expensesStoreMock.error.set('Failed to load expenses');
     expensesStoreMock.loading.set(false);
 
@@ -210,7 +210,7 @@ describe('DashboardPage', () => {
     expect(fixture.debugElement.query(By.css('#dashboardPageErrorText'))).toBeTruthy();
   });
 
-  it('should display loading state instead of error while loading', () => {
+  test('should display loading state instead of error while loading', () => {
     expensesStoreMock.loading.set(true);
     expensesStoreMock.error.set('Failed to load expenses');
 

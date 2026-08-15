@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 import { of, Subject } from 'rxjs';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { ExpensesApiService } from '../api/expense-api-service';
 import { Expense } from '../model/expense.model';
 import { ExpensesStore } from './expense.store';
@@ -71,7 +71,7 @@ describe('ExpensesStore', () => {
     expensesApi.getExpenses.mockClear();
   });
 
-  it('should have an empty initial state', () => {
+  test('should have an empty initial state', () => {
     const store = TestBed.inject(ExpensesStore);
 
     expect(store.expenses()).toEqual([]);
@@ -79,7 +79,7 @@ describe('ExpensesStore', () => {
     expect(store.error()).toBeNull();
   });
 
-  it('should calculate expense count and total amount', () => {
+  test('should calculate expense count and total amount', () => {
     const store = TestBed.inject(ExpensesStore);
 
     patchState(unprotected(store), {
@@ -121,7 +121,7 @@ describe('ExpensesStore', () => {
     expect(store.totalExpensesAmountInMinorUnits()).toBe(18698);
   });
 
-  it('should recalculate derived values when expenses change', () => {
+  test('should recalculate derived values when expenses change', () => {
     const store = TestBed.inject(ExpensesStore);
 
     patchState(unprotected(store), {
@@ -171,7 +171,7 @@ describe('ExpensesStore', () => {
     expect(store.totalExpensesAmountInMinorUnits()).toBe(3500);
   });
 
-  it('should load expenses from the API', () => {
+  test('should load expenses from the API', () => {
     const store = TestBed.inject(ExpensesStore);
     const subject = new Subject<Expense[]>();
 
@@ -190,7 +190,7 @@ describe('ExpensesStore', () => {
     expect(store.error()).toBeNull();
   });
 
-  it('should expose an error when loading expenses fails', () => {
+  test('should expose an error when loading expenses fails', () => {
     const store = TestBed.inject(ExpensesStore);
     const subject = new Subject<Expense[]>();
     vi.mocked(expensesApi.getExpenses).mockReturnValue(subject);
@@ -205,7 +205,7 @@ describe('ExpensesStore', () => {
     expect(store.error()).toBe('Failed to load expenses.');
   });
 
-  it('should ignore the previous request when loading expenses again', () => {
+  test('should ignore the previous request when loading expenses again', () => {
     const store = TestBed.inject(ExpensesStore);
 
     const firstRequest$ = new Subject<Expense[]>();
@@ -230,7 +230,7 @@ describe('ExpensesStore', () => {
     secondRequest$.complete();
   });
 
-  it('should clear a previous error when loading starts', () => {
+  test('should clear a previous error when loading starts', () => {
     const store = TestBed.inject(ExpensesStore);
 
     patchState(unprotected(store), {
@@ -246,7 +246,7 @@ describe('ExpensesStore', () => {
     expect(store.loading()).toBe(true);
   });
 
-  it('should preserve existing expenses when loading fails', () => {
+  test('should preserve existing expenses when loading fails', () => {
     const store = TestBed.inject(ExpensesStore);
 
     patchState(unprotected(store), {
@@ -265,7 +265,7 @@ describe('ExpensesStore', () => {
     expect(store.error()).toBe('Failed to load expenses.');
   });
 
-  it('should handle an empty expense list', () => {
+  test('should handle an empty expense list', () => {
     const store = TestBed.inject(ExpensesStore);
 
     const response$ = new Subject<Expense[]>();
@@ -283,7 +283,7 @@ describe('ExpensesStore', () => {
     expect(store.error()).toBeNull();
   });
 
-  it('should handle negative expense amounts', () => {
+  test('should handle negative expense amounts', () => {
     const store = TestBed.inject(ExpensesStore);
 
     const response$ = new Subject<Expense[]>();

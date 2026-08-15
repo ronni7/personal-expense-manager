@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppShell } from './app-shell';
+import { test } from 'vitest';
 
 describe('AppShell', () => {
   let component: AppShell;
@@ -17,7 +18,7 @@ describe('AppShell', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  test('should create', () => {
     expect(component).toBeTruthy();
   });
 });

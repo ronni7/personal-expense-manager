@@ -1,6 +1,6 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { CategoriesStore } from '../../categories/store/category.store';
 import { ExpensesStore } from '../../expenses/store/expense.store';
@@ -91,14 +91,14 @@ describe('DashboardStore', () => {
     vi.clearAllMocks();
   });
 
-  it('should load expenses and categories on initialization', () => {
+  test('should load expenses and categories on initialization', () => {
     TestBed.inject(DashboardStore);
 
     expect(expensesStoreMock.loadExpenses).toHaveBeenCalledOnce();
     expect(categoriesStoreMock.loadCategories).toHaveBeenCalledOnce();
   });
 
-  it('should expose financial data from ExpensesStore', () => {
+  test('should expose financial data from ExpensesStore', () => {
     expensesStoreMock.expenseTotal.set(12_000);
     expensesStoreMock.incomeTotal.set(50_000);
     expensesStoreMock.balance.set(38_000);
@@ -114,7 +114,7 @@ describe('DashboardStore', () => {
     expect(store.totalExpensesAmountInMinorUnits()).toBe(12_000);
   });
 
-  it('should update financial data when ExpensesStore state changes', () => {
+  test('should update financial data when ExpensesStore state changes', () => {
     const store = TestBed.inject(DashboardStore);
 
     expect(store.incomeTotal()).toBe(0);
@@ -130,7 +130,7 @@ describe('DashboardStore', () => {
     expect(store.balance()).toBe(38_000);
   });
 
-  it('should combine expenses with their categories', () => {
+  test('should combine expenses with their categories', () => {
     expensesStoreMock.expenses.set(expenses);
     categoriesStoreMock.categories.set(categories);
 
@@ -147,7 +147,7 @@ describe('DashboardStore', () => {
       },
     ]);
   });
-  it('should set category to null when expense category does not exist', () => {
+  test('should set category to null when expense category does not exist', () => {
     const expenses: Expense[] = [
       {
         id: '1',
@@ -174,7 +174,7 @@ describe('DashboardStore', () => {
       },
     ]);
   });
-  it('should return recent expenses sorted by date descending', () => {
+  test('should return recent expenses sorted by date descending', () => {
     const expenses: Expense[] = [
       {
         id: '1',
@@ -215,7 +215,7 @@ describe('DashboardStore', () => {
     expect(store.recentExpenses().map((expense) => expense.id)).toEqual(['2', '3', '1']);
   });
 
-  it('should return at most five recent expenses', () => {
+  test('should return at most five recent expenses', () => {
     const expenses: Expense[] = Array.from({ length: 7 }, (_, index) => ({
       id: `${index + 1}`,
       description: `Expense ${index + 1}`,
@@ -233,7 +233,7 @@ describe('DashboardStore', () => {
 
     expect(store.recentExpenses()).toHaveLength(5);
   });
-  it('should be loading when expenses or categories are loading', () => {
+  test('should be loading when expenses or categories are loading', () => {
     const store = TestBed.inject(DashboardStore);
 
     expect(store.isLoading()).toBe(false);
@@ -249,7 +249,7 @@ describe('DashboardStore', () => {
     expect(store.isLoading()).toBe(false);
   });
 
-  it('should be throwing expenses error first when expenses store has error, even if categories store has error as well', () => {
+  test('should be throwing expenses error first when expenses store has error, even if categories store has error as well', () => {
     const store = TestBed.inject(DashboardStore);
 
     expensesStoreMock.error.set('Failed to load expenses');
@@ -258,7 +258,7 @@ describe('DashboardStore', () => {
     expect(store.error()).toBe('Failed to load expenses');
   });
 
-  it('should be throwing categories error  when expenses store has no  error', () => {
+  test('should be throwing categories error  when expenses store has no  error', () => {
     const store = TestBed.inject(DashboardStore);
 
     categoriesStoreMock.error.set('Failed to load categories');
@@ -266,7 +266,7 @@ describe('DashboardStore', () => {
     expect(store.error()).toBe('Failed to load categories');
   });
 
-  it('should return null when neither store has an error', () => {
+  test('should return null when neither store has an error', () => {
     const store = TestBed.inject(DashboardStore);
 
     expect(store.error()).toBeNull();
