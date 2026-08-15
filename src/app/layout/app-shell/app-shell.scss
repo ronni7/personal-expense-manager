@@ -1,0 +1,4 @@
+.full-height-custom {
+  /* Tailwind h-16 = 4rem = 64px; calculated to match the header height and avoid future debugging confusion. */
+  height: calc(100vh - 4rem);
+}
