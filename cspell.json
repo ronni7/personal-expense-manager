@@ -10,6 +10,7 @@
     "ExpensesStore",
     "CategoriesStore",
     "DashboardStore",
-    "ExpensesPageStore"
+    "ExpensesPageStore",
+    "Vitest"
   ]
 }
