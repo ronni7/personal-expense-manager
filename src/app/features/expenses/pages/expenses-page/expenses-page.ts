@@ -44,4 +44,10 @@ export class ExpensesPage {
   protected onSortChange(sort: Sort): void {
     this.expensesPageStore.setSort(sort);
   }
+
+  protected onSearchQueryChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    this.expensesPageStore.setSearchQuery(input.value);
+  }
 }

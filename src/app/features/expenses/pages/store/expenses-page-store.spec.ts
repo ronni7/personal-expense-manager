@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ExpensesPageStore } from './expenses-page-store';
-import { test, vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import { ExpensesStore } from '../../store/expense.store';
 import { Expense } from '../../model/expense.model';
 import { signal } from '@angular/core';
@@ -26,12 +26,13 @@ const expensesStoreMock = {
   totalExpensesAmountInMinorUnits: signal(0),
   loadExpenses: vi.fn(),
 };
+
 const expenses: Expense[] = [
   {
     id: '1',
     categoryId: 'food',
     description: 'Groceries',
-    amountInMinorUnits: 4_500,
+    amountInMinorUnits: 4500,
     date: '2026-08-10',
     currency: 'PLN',
     createdAt: '2026-08-10T18:30:00Z',
@@ -41,13 +42,47 @@ const expenses: Expense[] = [
     id: '2',
     categoryId: 'bills',
     description: 'Electricity',
-    amountInMinorUnits: 12_000,
+    amountInMinorUnits: 12000,
     date: '2026-08-09',
     currency: 'PLN',
     createdAt: '2026-08-12T18:30:00Z',
     updatedAt: '2026-08-10T18:30:00Z',
   },
 ];
+
+const expensesSortingMock: Expense[] = [
+  {
+    id: '1',
+    categoryId: 'food',
+    description: 'Groceries',
+    amountInMinorUnits: 4500,
+    date: '2026-08-10',
+    currency: 'PLN',
+    createdAt: '2026-08-10T18:30:00Z',
+    updatedAt: '2026-08-10T18:30:00Z',
+  },
+  {
+    id: '2',
+    categoryId: 'bills',
+    description: 'Electricity',
+    amountInMinorUnits: 12000,
+    date: '2026-08-09',
+    currency: 'PLN',
+    createdAt: '2026-08-12T18:30:00Z',
+    updatedAt: '2026-08-10T18:30:00Z',
+  },
+  {
+    id: '3',
+    categoryId: 'food',
+    description: 'Groceries',
+    amountInMinorUnits: 4200,
+    date: '2026-08-19',
+    currency: 'PLN',
+    createdAt: '2026-08-19T22:30:00Z',
+    updatedAt: '2026-08-19T22:30:00Z',
+  },
+];
+
 describe('ExpensesPageStore', () => {
   beforeEach(() => {
     expensesStoreMock.expenses.set([]);
@@ -205,6 +240,132 @@ describe('ExpensesPageStore', () => {
         },
       },
     ]);
+  });
+  test('should sort expenses by date descending by default', () => {
+    expensesStoreMock.expenses.set(expenses);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    expect(store.sortedExpenses().map((expense) => expense.id)).toEqual(['1', '2']);
+  });
+  test('should sort expenses by date ascending', () => {
+    expensesStoreMock.expenses.set(expenses);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    store.setSort({
+      active: 'date',
+      direction: 'asc',
+    });
+
+    expect(store.sortedExpenses().map((expense) => expense.id)).toEqual(['2', '1']);
+  });
+  test('should sort expenses by amount descending', () => {
+    expensesStoreMock.expenses.set(expenses);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    store.setSort({
+      active: 'amount',
+      direction: 'desc',
+    });
+
+    expect(store.sortedExpenses().map((expense) => expense.id)).toEqual(['2', '1']);
+  });
+  test('should preserve original order when sorting is cleared', () => {
+    expensesStoreMock.expenses.set(expenses);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    store.setSort({
+      active: 'date',
+      direction: '',
+    });
+
+    expect(store.sortedExpenses().map((expense) => expense.id)).toEqual(['1', '2']);
+  });
+  test('should ignore unsupported sort column', () => {
+    expensesStoreMock.expenses.set(expenses);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    store.setSort({
+      active: 'unsupported',
+      direction: 'asc',
+    });
+
+    expect(store.sortedExpenses().map((expense) => expense.id)).toEqual(['1', '2']);
+  });
+  test('should return all expenses when search query is empty', () => {
+    expensesStoreMock.expenses.set(expenses);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    expect(store.filteredExpenses().length).toBe(expenses.length);
+  });
+  test('should filter expenses by description', () => {
+    expensesStoreMock.expenses.set(expenses);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    store.setSearchQuery('groceries');
+
+    expect(store.filteredExpenses().length).toBe(1);
+    expect(store.filteredExpenses()[0].id).toBe('1');
+  });
+  test('should filter expenses by category name', () => {
+    expensesStoreMock.expenses.set(expenses);
+
+    categoriesStoreMock.categories.set([
+      {
+        id: 'food',
+        name: 'Food',
+      },
+      {
+        id: 'bills',
+        name: 'Bills',
+      },
+    ]);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    store.setSearchQuery('food');
+
+    expect(store.filteredExpenses().length).toBe(1);
+    expect(store.filteredExpenses()[0].id).toBe('1');
+  });
+  test('should filter expenses case-insensitively', () => {
+    expensesStoreMock.expenses.set(expenses);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    store.setSearchQuery('groceries');
+
+    expect(store.filteredExpenses().length).toBe(1);
+  });
+  test('should return no expenses when search query has no matches', () => {
+    expensesStoreMock.expenses.set(expenses);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    store.setSearchQuery('non-existent');
+
+    expect(store.filteredExpenses().length).toBe(0);
+  });
+
+  test('should sort filtered expenses', () => {
+    expensesStoreMock.expenses.set(expensesSortingMock);
+
+    const store = TestBed.inject(ExpensesPageStore);
+
+    store.setSearchQuery('groceries');
+    store.setSort({
+      active: 'date',
+      direction: 'asc',
+    });
+
+    expect(store.sortedExpenses().length).toBe(2);
+    expect(store.sortedExpenses()[0].id).toBe('1');
   });
 });
 
@@ -396,5 +557,79 @@ describe('ExpensesPageUI', () => {
 
     expect(rows[0].nativeElement.textContent).toContain('2026-08-10');
     expect(rows[1].nativeElement.textContent).toContain('2026-08-09');
+  });
+  test('should sort rows when table sort changes', () => {
+    expensesStoreMock.expenses.set([
+      expenses[0], // 2026-08-10
+      expenses[1], // 2026-08-09
+    ]);
+    expensesStoreMock.expenseCount.set(2);
+
+    fixture.detectChanges();
+
+    const sortHeader = fixture.debugElement.query(By.css('[mat-sort-header="date"]'));
+
+    sortHeader.nativeElement.click();
+
+    fixture.detectChanges();
+
+    const rows = fixture.debugElement.queryAll(By.css('tr[mat-row]'));
+
+    expect(rows[0].nativeElement.textContent).toContain('2026-08-09');
+    expect(rows[1].nativeElement.textContent).toContain('2026-08-10');
+  });
+
+  test('should filter table rows when search query changes', () => {
+    expensesStoreMock.expenses.set(expenses);
+    expensesStoreMock.expenseCount.set(expenses.length);
+
+    categoriesStoreMock.categories.set([
+      {
+        id: 'food',
+        name: 'Food',
+      },
+      {
+        id: 'bills',
+        name: 'Bills',
+      },
+    ]);
+
+    fixture.detectChanges();
+
+    const searchInput = fixture.debugElement.query(
+      By.css('#expensesPageSearchInput'),
+    ).nativeElement;
+
+    searchInput.value = 'groceries';
+    searchInput.dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+
+    const rows = fixture.debugElement.queryAll(By.css('tr[mat-row]'));
+
+    expect(rows.length).toBe(1);
+    expect(rows[0].nativeElement.textContent).toContain('Groceries');
+
+    expect(fixture.nativeElement.textContent).not.toContain('Electricity');
+  });
+
+  test('should display no search results state when filter matches no expenses', () => {
+    expensesStoreMock.expenses.set(expenses);
+    expensesStoreMock.expenseCount.set(expenses.length);
+
+    fixture.detectChanges();
+
+    const searchInput = fixture.debugElement.query(
+      By.css('#expensesPageSearchInput'),
+    ).nativeElement;
+
+    searchInput.value = 'does-not-exist';
+    searchInput.dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('#expensesPageNoSearchResultsText'))).toBeTruthy();
+
+    expect(fixture.debugElement.query(By.css('tr[mat-row]'))).toBeNull();
   });
 });

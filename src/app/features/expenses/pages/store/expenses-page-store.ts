@@ -17,11 +17,13 @@ import { ExpenseTableColumn, isExpenseTableColumn } from '../expenses-page/expen
 interface ExpensesPageState {
   sortColumn: ExpenseTableColumn;
   sortDirection: SortDirection;
+  searchQuery: string;
 }
 
 const initialState: ExpensesPageState = {
   sortColumn: 'date',
   sortDirection: 'desc',
+  searchQuery: '',
 };
 
 export const ExpensesPageStore = signalStore(
@@ -57,10 +59,25 @@ export const ExpensesPageStore = signalStore(
       })),
     ),
   })),
+  withComputed((store) => ({
+    filteredExpenses: computed(() => {
+      const query = store.searchQuery().trim().toLowerCase();
 
+      if (!query) {
+        return store.expensesWithCategory();
+      }
+
+      return store.expensesWithCategory().filter((expense) => {
+        const description = expense.description.toLowerCase();
+        const category = expense.category?.name.toLowerCase() ?? '';
+
+        return description.includes(query) || category.includes(query);
+      });
+    }),
+  })),
   withComputed((store) => ({
     sortedExpenses: computed(() => {
-      const expenses = [...store.expensesWithCategory()];
+      const expenses = [...store.filteredExpenses()];
       const { sortColumn, sortDirection } = store;
 
       if (!sortDirection) {
@@ -104,6 +121,12 @@ export const ExpensesPageStore = signalStore(
       patchState(store, {
         sortColumn: sort.active,
         sortDirection: sort.direction,
+      });
+    },
+
+    setSearchQuery(searchQuery: string) {
+      patchState(store, {
+        searchQuery,
       });
     },
   })),
