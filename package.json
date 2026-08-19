@@ -7,9 +7,11 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:silent": "ng test --watch=false",
     "lint": "ng lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "spellcheck:commit": "cspell --no-progress",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -62,6 +64,7 @@
     "@commitlint/config-conventional": "^21.2.0",
     "@types/jasmine": "~5.1.0",
     "angular-eslint": "20.7.0",
+    "cspell": "^10.0.1",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",

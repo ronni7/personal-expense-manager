@@ -1,0 +1,15 @@
+{
+  "version": "0.2",
+  "language": "en,en-GB",
+  "words": [
+    "Angular",
+    "NgRx",
+    "SignalStore",
+    "Vitest",
+    "MatTable",
+    "ExpensesStore",
+    "CategoriesStore",
+    "DashboardStore",
+    "ExpensesPageStore"
+  ]
+}
