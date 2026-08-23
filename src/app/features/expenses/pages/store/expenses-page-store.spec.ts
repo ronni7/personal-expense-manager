@@ -8,6 +8,7 @@ import { ExpensesPage } from '../expenses-page/expenses-page';
 import { By } from '@angular/platform-browser';
 import { Category } from '../../../categories/model/category.model';
 import { CategoriesStore } from '../../../categories/store/category.store';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 const categoriesStoreMock = {
   categories: signal<Category[]>([]),
@@ -19,6 +20,8 @@ const expensesStoreMock = {
   expenses: signal<Expense[]>([]),
   loading: signal<boolean>(false),
   error: signal<string | null>(null),
+  createError: signal<boolean>(false),
+  creating: signal<boolean>(false),
   expenseTotal: signal(0),
   incomeTotal: signal(0),
   expenseCount: signal(0),
@@ -96,6 +99,8 @@ describe('ExpensesPageStore', () => {
     vi.clearAllMocks();
     TestBed.configureTestingModule({
       providers: [
+        MatDialog,
+        { provide: MatDialogRef, useValue: {} },
         ExpensesPageStore,
         {
           provide: ExpensesStore,
@@ -390,6 +395,9 @@ describe('ExpensesPageUI', () => {
     TestBed.configureTestingModule({
       providers: [
         ExpensesPageStore,
+        MatDialog,
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: MatDialogRef, useValue: {} },
         { provide: ExpensesStore, useValue: expensesStoreMock },
         { provide: CategoriesStore, useValue: categoriesStoreMock },
       ],

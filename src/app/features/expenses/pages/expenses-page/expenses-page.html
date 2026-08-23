@@ -5,19 +5,44 @@
     {{ error }}
   </p>
 } @else {
-  <main id="expensesPageContainer" class="flex h-full flex-col">
-    <header id="expensesPageHeader" class="space-y-3">
-      <h1 id="expensesPageTitle" class="text-2xl font-semibold">Expenses</h1>
-      <input
-        id="expensesPageSearchInput"
-        type="search"
-        placeholder="Search expenses..."
-        (input)="onSearchQueryChange($event)"
-        class="w-full rounded-xl border border-slate-200 bg-white/80 px-4 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 placeholder:text-slate-400 focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
-      />
+  <main
+    id="expensesPageContainer"
+    class="flex h-full flex-col border border-slate-800 p-4 text-slate-100 sm:p-6"
+  >
+    <header
+      id="expensesPageHeader"
+      class="mb-4 flex flex-col gap-3 border-b border-slate-800 pb-4 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <h1 id="expensesPageTitle" class="text-2xl font-semibold tracking-tight text-black">
+        Expenses
+      </h1>
+
+      <div
+        class="flex w-full flex-col gap-3 sm:max-w-xl sm:flex-row sm:items-center sm:justify-end"
+      >
+        <input
+          id="expensesPageSearchInput"
+          type="search"
+          placeholder="Search expenses..."
+          (input)="onSearchQueryChange($event)"
+          class="w-full rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-2.5 text-sm text-slate-100 shadow-sm outline-none transition duration-200 placeholder:text-slate-400 focus:border-sky-400 focus:ring-4 focus:ring-sky-500/20"
+        />
+
+        <button
+          id="expensesPageCreateExpenseButton"
+          mat-flat-button
+          type="button"
+          (click)="openCreateExpenseDialog()"
+          class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-medium text-white shadow-sm transition duration-200 hover:bg-sky-400 focus:outline-none focus:ring-4 focus:ring-sky-500/20 active:translate-y-px"
+        >
+          Add expense
+        </button>
+      </div>
     </header>
 
-    <div class="flex flex-1 flex-col">
+    <div
+      class="flex flex-1 flex-col rounded-2xl border border-slate-800 bg-slate-900/40 p-3 shadow-sm sm:p-4"
+    >
       @if (expensesPageStore.expenseCount() === 0) {
         <p id="expensesPageNoExpensesText" class="text-xl text-gray-500">No expenses yet.</p>
       } @else if (expensesPageStore.sortedExpenses().length === 0) {

@@ -1,0 +1,95 @@
+<form
+  id="expenseForm"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  class="flex flex-col gap-5 h-full"
+>
+  <div id="expenseFormFieldsContainer" class="flex flex-col gap-5 flex-1">
+    <mat-form-field id="expenseFormDescriptionField" appearance="fill">
+      <mat-label id="expenseFormDescriptionLabel">Description</mat-label>
+
+      <input
+        id="expenseFormDescription"
+        matInput
+        formControlName="description"
+        placeholder="e.g. Groceries"
+      />
+
+      @if (form.controls.description.hasError('required')) {
+        <mat-error id="expenseFormDescriptionErrorRequired">Description is required.</mat-error>
+      } @else if (form.controls.description.hasError('maxlength')) {
+        <mat-error id="expenseFormDescriptionErrorMaxlength"
+          >Description cannot exceed 100 characters.</mat-error
+        >
+      }
+    </mat-form-field>
+
+    <mat-form-field id="expenseFormAmountField" appearance="fill">
+      <mat-label id="expenseFormAmountLabel">Amount</mat-label>
+
+      <input
+        id="expenseFormAmount"
+        matInput
+        type="number"
+        step="0.01"
+        min="0.01"
+        formControlName="amount"
+        placeholder="0.00"
+      />
+      @if (form.controls.amount.hasError('required')) {
+        <mat-error id="expenseFormAmountErrorRequired">Amount is required.</mat-error>
+      } @else if (form.controls.amount.hasError('min')) {
+        <mat-error id="expenseFormAmountErrorMin">Amount must be greater than 0.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field id="expenseFormCurrencyField" appearance="fill">
+      <mat-label id="expenseFormCurrencyLabel">Currency</mat-label>
+
+      <mat-select id="expenseFormCurrency" formControlName="currency">
+        <mat-option id="expenseFormCurrencyOptionPLN" selected value="PLN">PLN</mat-option>
+        <mat-option id="expenseFormCurrencyOptionEUR" value="EUR">EUR</mat-option>
+        <mat-option id="expenseFormCurrencyOptionUSD" value="USD">USD</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field id="expenseFormCategoryField" appearance="fill">
+      <mat-label id="expenseFormCategoryLabel">Category</mat-label>
+
+      <mat-select id="expenseFormCategory" formControlName="categoryId">
+        @for (category of categories(); track category.id) {
+          <mat-option id="expenseFormCategoryOption-{{ category.id }}" [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+        }
+      </mat-select>
+
+      @if (form.controls.categoryId.hasError('required')) {
+        <mat-error id="expenseFormCategoryError">Category is required.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field id="expenseFormDateField" appearance="fill">
+      <mat-label id="expenseFormDateLabel">Date</mat-label>
+
+      <input id="expenseFormDate" matInput type="date" formControlName="date" />
+
+      @if (form.controls.date.hasError('required')) {
+        <mat-error id="expenseFormDateError">Date is required.</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div id="expenseFormButtonContainer" class="flex justify-end gap-3 pt-2">
+    <button id="expenseFormCancelButton" mat-stroked-button type="button" (click)="onCancel()">
+      Cancel
+    </button>
+
+    <button id="expenseFormSubmitButton" mat-flat-button type="submit" [disabled]="isSubmitting()">
+      @if (isSubmitting()) {
+        Creating...
+      } @else {
+        Create expense
+      }
+    </button>
+  </div>
+</form>

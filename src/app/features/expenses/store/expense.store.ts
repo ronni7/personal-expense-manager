@@ -5,17 +5,23 @@ import { Expense } from '../model/expense.model';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
+import { CreateExpenseRequest } from '../api/create-expense-request.model';
+import { mapExpenseDtoToExpense } from '../api/expense.mapper';
 
 interface ExpensesState {
   expenses: Expense[];
   loading: boolean;
+  creating: boolean;
   error: string | null;
+  createError: string | null;
 }
 
 const initialState: ExpensesState = {
   expenses: [] as Expense[],
   loading: false,
+  creating: false,
   error: null,
+  createError: null,
 };
 
 export const ExpensesStore = signalStore(
@@ -46,6 +52,7 @@ export const ExpensesStore = signalStore(
       return store.incomeTotal() - store.expenseTotal();
     }),
   })),
+
   withMethods((store, expensesApi = inject(ExpensesApiService)) => ({
     loadExpenses: rxMethod<void>(
       pipe(
@@ -70,6 +77,38 @@ export const ExpensesStore = signalStore(
             });
           },
         }),
+      ),
+    ),
+    addExpense: rxMethod<CreateExpenseRequest>(
+      pipe(
+        tap(() => {
+          patchState(store, {
+            creating: true,
+            createError: null,
+          });
+        }),
+
+        switchMap((request) =>
+          expensesApi.createExpense(request).pipe(
+            tapResponse({
+              next: (dto) => {
+                const expense = mapExpenseDtoToExpense(dto);
+
+                patchState(store, (state) => ({
+                  expenses: [...state.expenses, expense],
+                  creating: false,
+                }));
+              },
+
+              error: () => {
+                patchState(store, {
+                  creating: false,
+                  createError: 'Failed to create expense.',
+                });
+              },
+            }),
+          ),
+        ),
       ),
     ),
   })),

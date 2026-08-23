@@ -13,6 +13,7 @@ import { SortDirection } from '@angular/material/sort';
 import { CategoriesStore } from '../../../categories/store/category.store';
 import { ExpensesStore } from '../../store/expense.store';
 import { ExpenseTableColumn, isExpenseTableColumn } from '../expenses-page/expense-table-columns';
+import { CreateExpenseRequest } from '../../api/create-expense-request.model';
 
 interface ExpensesPageState {
   sortColumn: ExpenseTableColumn;
@@ -42,13 +43,19 @@ export const ExpensesPageStore = signalStore(
   }),
 
   withComputed(({ expensesStore, categoriesStore }) => ({
+    categories: computed(() => categoriesStore.categories()),
+
     expenses: computed(() => expensesStore.expenses()),
 
     expenseCount: computed(() => expensesStore.expenseCount()),
 
     isLoading: computed(() => expensesStore.loading() || categoriesStore.loading()),
 
+    isCreating: computed(() => expensesStore.creating()),
+
     error: computed(() => expensesStore.error() ?? categoriesStore.error() ?? null),
+
+    createError: computed(() => expensesStore.createError()),
 
     expensesWithCategory: computed(() =>
       expensesStore.expenses().map((expense) => ({
@@ -128,6 +135,9 @@ export const ExpensesPageStore = signalStore(
       patchState(store, {
         searchQuery,
       });
+    },
+    addExpense(request: CreateExpenseRequest) {
+      store.expensesStore.addExpense(request);
     },
   })),
 );

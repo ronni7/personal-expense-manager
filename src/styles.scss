@@ -40,4 +40,11 @@ body {
 
   // Reset the user agent margin.
   margin: 0;
+
+  .expense-create-dialog {
+    .mat-mdc-dialog-content {
+      max-height: calc(100% - 0px);
+      flex: 1;
+    }
+  }
 }

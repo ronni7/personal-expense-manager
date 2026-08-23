@@ -3,9 +3,12 @@ import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 import { of, Subject } from 'rxjs';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { CreateExpenseRequest } from '../api/create-expense-request.model';
 import { ExpensesApiService } from '../api/expense-api-service';
+import { ExpenseDto } from '../api/expense.dto';
 import { Expense } from '../model/expense.model';
 import { ExpensesStore } from './expense.store';
+import { mapExpenseDtoToExpense } from '../api/expense.mapper';
 
 describe('ExpensesStore', () => {
   const negativeExpenses: Expense[] = [
@@ -56,8 +59,26 @@ describe('ExpensesStore', () => {
   const expensesApi = {
     getExpenses: vi.fn(() => of(mockExpenses)),
     getNegativeExpenses: vi.fn(() => of(negativeExpenses)),
+    createExpense: vi.fn(),
   };
-
+  const now = new Date().toISOString();
+  const createExpenseRequest: CreateExpenseRequest = {
+    amountInMinorUnits: 2500,
+    currency: 'PLN',
+    description: 'Lunch',
+    categoryId: 'food',
+    date: '2026-08-10',
+  };
+  const expenseDto: ExpenseDto = {
+    id: '1',
+    amountInMinorUnits: 2500,
+    currency: 'PLN',
+    description: 'Lunch',
+    categoryId: 'food',
+    date: '2026-08-10',
+    createdAt: now,
+    updatedAt: now,
+  };
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -68,12 +89,14 @@ describe('ExpensesStore', () => {
         },
       ],
     });
-    expensesApi.getExpenses.mockClear();
+    vi.clearAllMocks();
   });
 
   test('should have an empty initial state', () => {
     const store = TestBed.inject(ExpensesStore);
 
+    expect(store.creating()).toBe(false);
+    expect(store.createError()).toBeNull();
     expect(store.expenses()).toEqual([]);
     expect(store.loading()).toBe(false);
     expect(store.error()).toBeNull();
@@ -298,5 +321,146 @@ describe('ExpensesStore', () => {
     expect(store.totalExpensesAmountInMinorUnits()).toBe(-1000);
     expect(store.loading()).toBe(false);
     expect(store.error()).toBeNull();
+  });
+
+  test('should set creating state while creating an expense', () => {
+    const response$ = new Subject<ExpenseDto>();
+
+    vi.mocked(expensesApi.createExpense).mockReturnValue(response$);
+
+    const store = TestBed.inject(ExpensesStore);
+
+    store.addExpense(createExpenseRequest);
+
+    expect(store.creating()).toBe(true);
+
+    response$.next(expenseDto);
+    response$.complete();
+
+    expect(store.creating()).toBe(false);
+  });
+  test('should send create expense request to API', () => {
+    const response$ = new Subject<ExpenseDto>();
+
+    vi.mocked(expensesApi.createExpense).mockReturnValue(response$);
+
+    const store = TestBed.inject(ExpensesStore);
+
+    store.addExpense(createExpenseRequest);
+
+    expect(expensesApi.createExpense).toHaveBeenCalledTimes(1);
+    expect(expensesApi.createExpense).toHaveBeenCalledWith(createExpenseRequest);
+
+    response$.complete();
+  });
+
+  test('should add created expense to state', () => {
+    const response$ = new Subject<ExpenseDto>();
+
+    vi.mocked(expensesApi.createExpense).mockReturnValue(response$);
+
+    const store = TestBed.inject(ExpensesStore);
+
+    store.addExpense(createExpenseRequest);
+
+    response$.next(expenseDto);
+    response$.complete();
+
+    expect(store.expenses()).toEqual([mapExpenseDtoToExpense(expenseDto)]);
+  });
+
+  test('should handle create expense error', () => {
+    const response$ = new Subject<ExpenseDto>();
+
+    vi.mocked(expensesApi.createExpense).mockReturnValue(response$);
+
+    const store = TestBed.inject(ExpensesStore);
+
+    store.addExpense(createExpenseRequest);
+
+    expect(store.creating()).toBe(true);
+
+    response$.error(new Error('API failure'));
+
+    expect(store.creating()).toBe(false);
+    expect(store.createError()).toBe('Failed to create expense.');
+  });
+
+  test('should preserve existing expenses when creating expense fails', () => {
+    const response$ = new Subject<ExpenseDto>();
+
+    vi.mocked(expensesApi.createExpense).mockReturnValue(response$);
+
+    const store = TestBed.inject(ExpensesStore);
+
+    patchState(unprotected(store), {
+      expenses: mockExpenses,
+    });
+
+    store.addExpense(createExpenseRequest);
+
+    response$.error(new Error('API failure'));
+
+    expect(store.expenses()).toEqual(mockExpenses);
+  });
+
+  test('should clear previous create error when creating starts', () => {
+    const response$ = new Subject<ExpenseDto>();
+
+    vi.mocked(expensesApi.createExpense).mockReturnValue(response$);
+
+    const store = TestBed.inject(ExpensesStore);
+
+    patchState(unprotected(store), {
+      createError: 'Previous create error',
+    });
+
+    store.addExpense(createExpenseRequest);
+
+    expect(store.createError()).toBeNull();
+    expect(store.creating()).toBe(true);
+
+    response$.complete();
+  });
+  test('should clear create error before a subsequent create attempt', () => {
+    const firstResponse$ = new Subject<ExpenseDto>();
+    const secondResponse$ = new Subject<ExpenseDto>();
+
+    vi.mocked(expensesApi.createExpense)
+      .mockReturnValueOnce(firstResponse$)
+      .mockReturnValueOnce(secondResponse$);
+
+    const store = TestBed.inject(ExpensesStore);
+
+    store.addExpense(createExpenseRequest);
+
+    firstResponse$.error(new Error('API failure'));
+
+    expect(store.createError()).toBe('Failed to create expense.');
+
+    store.addExpense(createExpenseRequest);
+
+    expect(expensesApi.createExpense).toHaveBeenCalledTimes(2);
+    expect(store.createError()).toBeNull();
+    expect(store.creating()).toBe(true);
+
+    secondResponse$.complete();
+  });
+  test('should add created expense to state', () => {
+    const response$ = new Subject<ExpenseDto>();
+
+    vi.mocked(expensesApi.createExpense).mockReturnValue(response$);
+
+    const store = TestBed.inject(ExpensesStore);
+
+    store.addExpense(createExpenseRequest);
+
+    response$.next(expenseDto);
+    response$.complete();
+
+    expect(store.expenses()).toEqual([mapExpenseDtoToExpense(expenseDto)]);
+
+    expect(store.creating()).toBe(false);
+    expect(store.createError()).toBeNull();
   });
 });

@@ -1,21 +1,26 @@
-import { Component, inject } from '@angular/core';
-import { ExpensesPageStore } from '../store/expenses-page-store';
+import { CurrencyPipe } from '@angular/common';
+import { Component, inject, output } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import {
-  MatTable,
+  MatCell,
+  MatCellDef,
   MatColumnDef,
   MatHeaderCell,
   MatHeaderCellDef,
-  MatCell,
-  MatCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
   MatRow,
   MatRowDef,
+  MatTable,
 } from '@angular/material/table';
-import { CurrencyPipe } from '@angular/common';
+import { CreateExpenseRequest } from '../../api/create-expense-request.model';
+import { CreateExpenseDialogComponent } from '../../components/create-expense-dialog/create-expense-dialog';
+
+import { ExpensesPageStore } from '../store/expenses-page-store';
 import { EXPENSE_TABLE_COLUMNS, ExpenseTableColumn } from './expense-table-columns';
-import { Sort } from '@angular/material/sort';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { CreateExpenseDialogData } from '../../model/create-expense-dialog-data.model';
+
 @Component({
   selector: 'app-expenses-page',
   imports: [
@@ -32,6 +37,7 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
     MatRowDef,
     MatSort,
     MatSortHeader,
+    MatDialogModule,
   ],
   providers: [ExpensesPageStore],
   templateUrl: './expenses-page.html',
@@ -40,6 +46,13 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
 export class ExpensesPage {
   protected readonly expensesPageStore = inject(ExpensesPageStore);
   protected readonly displayedColumns: readonly ExpenseTableColumn[] = EXPENSE_TABLE_COLUMNS;
+  private readonly dialog = inject(MatDialog);
+  private readonly data = inject<CreateExpenseDialogData | undefined>(MAT_DIALOG_DATA, {
+    optional: true,
+  });
+  readonly createExpenseCancel = output<void>();
+
+  protected readonly categories = this.data?.categories ?? [];
 
   protected onSortChange(sort: Sort): void {
     this.expensesPageStore.setSort(sort);
@@ -49,5 +62,29 @@ export class ExpensesPage {
     const input = event.target as HTMLInputElement;
 
     this.expensesPageStore.setSearchQuery(input.value);
+  }
+
+  protected onCreateExpense(request: CreateExpenseRequest): void {
+    this.expensesPageStore.addExpense(request);
+  }
+
+  protected openCreateExpenseDialog(): void {
+    const dialogRef = this.dialog.open(CreateExpenseDialogComponent, {
+      width: '500px',
+      maxWidth: '95vw',
+      height: 'min(800px, 95vh)',
+      panelClass: 'expense-create-dialog',
+      data: {
+        categories: this.expensesPageStore.categories(),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((request?: CreateExpenseRequest) => {
+      if (!request) {
+        return;
+      }
+
+      this.expensesPageStore.addExpense(request);
+    });
   }
 }

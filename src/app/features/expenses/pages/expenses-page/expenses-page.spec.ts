@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExpensesPage } from './expenses-page';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { test } from 'vitest';
+import { ExpensesPage } from './expenses-page';
 
 describe('ExpensesPage', () => {
   let component: ExpensesPage;
@@ -10,6 +11,7 @@ describe('ExpensesPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ExpensesPage],
+      providers: [MatDialog, { provide: MAT_DIALOG_DATA, useValue: {} }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExpensesPage);
