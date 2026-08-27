@@ -15,7 +15,6 @@ import {
   MatTable,
 } from '@angular/material/table';
 import { CreateExpenseRequest } from '../../api/create-expense-request.model';
-import { CreateExpenseDialogComponent } from '../../components/create-expense-dialog/create-expense-dialog';
 
 import { ExpensesPageStore } from '../store/expenses-page-store';
 import { EXPENSE_TABLE_COLUMNS, ExpenseTableColumn } from './expense-table-columns';
@@ -68,7 +67,10 @@ export class ExpensesPage {
     this.expensesPageStore.addExpense(request);
   }
 
-  protected openCreateExpenseDialog(): void {
+  protected async openCreateExpenseDialog(): Promise<void> {
+    const { CreateExpenseDialogComponent } =
+      await import('../../components/create-expense-dialog/create-expense-dialog');
+
     const dialogRef = this.dialog.open(CreateExpenseDialogComponent, {
       width: '500px',
       maxWidth: '95vw',
