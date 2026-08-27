@@ -5,6 +5,11 @@
   class="flex flex-col gap-5 h-full"
 >
   <div id="expenseFormFieldsContainer" class="flex flex-col gap-5 flex-1">
+    @if (submissionError(); as errorMessage) {
+      <p id="expenseFormCreateError" class="text-sm text-red-500">
+        {{ errorMessage }}
+      </p>
+    }
     <mat-form-field id="expenseFormDescriptionField" appearance="fill">
       <mat-label id="expenseFormDescriptionLabel">Description</mat-label>
 

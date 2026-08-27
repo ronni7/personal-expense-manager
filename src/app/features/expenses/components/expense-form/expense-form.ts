@@ -26,6 +26,7 @@ import { MatOption, MatSelect } from '@angular/material/select';
 })
 export class ExpenseFormComponent {
   readonly categories = input.required<Category[]>();
+  readonly submissionError = input<string | null>(null);
   readonly isSubmitting = input(false);
   protected readonly createExpenseEvent = output<CreateExpenseRequest>();
   protected readonly createExpenseCancel = output<void>();

@@ -5,11 +5,11 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Category } from '../../../categories/model/category.model';
-import { CategoriesStore } from '../../../categories/store/category.store';
 import { CreateExpenseRequest } from '../../api/create-expense-request.model';
-import { Expense } from '../../model/expense.model';
-import { CreateExpenseDialogComponent } from './create-expense-dialog';
 import { CreateExpenseDialogData } from '../../model/create-expense-dialog-data.model';
+import { Expense } from '../../model/expense.model';
+import { ExpensesStore } from '../../store/expense.store';
+import { CreateExpenseDialogComponent } from './create-expense-dialog';
 
 describe('CreateExpenseDialogComponent', () => {
   let fixture: ComponentFixture<CreateExpenseDialogComponent>;
@@ -19,19 +19,10 @@ describe('CreateExpenseDialogComponent', () => {
     expenses: signal<Expense[]>([]),
     loading: signal<boolean>(false),
     error: signal<string | null>(null),
-    expenseTotal: signal(0),
-    incomeTotal: signal(0),
     expenseCount: signal(0),
-    balance: signal(0),
-    totalExpensesAmountInMinorUnits: signal(0),
-    loadExpenses: vi.fn(),
-  };
-
-  const categoriesStoreMock = {
-    categories: signal<Category[]>([]),
-    loading: signal<boolean>(false),
-    error: signal<string | null>(null),
-    loadCategories: vi.fn(),
+    creating: signal(false),
+    createError: signal<string | null>(null),
+    addExpense: vi.fn(),
   };
 
   const categories: Category[] = [
@@ -59,10 +50,12 @@ describe('CreateExpenseDialogComponent', () => {
     expensesStoreMock.expenseCount.set(0);
     expensesStoreMock.loading.set(false);
     expensesStoreMock.error.set(null);
+    expensesStoreMock.creating.set(false);
+    expensesStoreMock.createError.set(null);
 
-    categoriesStoreMock.categories.set([]);
-    categoriesStoreMock.loading.set(false);
-    categoriesStoreMock.error.set(null);
+    expensesStoreMock.addExpense.mockImplementation(() => {
+      expensesStoreMock.creating.set(true);
+    });
     TestBed.configureTestingModule({
       imports: [CreateExpenseDialogComponent],
       providers: [
@@ -75,8 +68,8 @@ describe('CreateExpenseDialogComponent', () => {
           useValue: dialogData,
         },
         {
-          provide: CategoriesStore,
-          useValue: categoriesStoreMock,
+          provide: ExpensesStore,
+          useValue: expensesStoreMock,
         },
       ],
     });
@@ -106,7 +99,7 @@ describe('CreateExpenseDialogComponent', () => {
     expect(options[1].textContent).toContain('Bills');
   });
 
-  test('should close dialog with created expense request', () => {
+  test('should add expense when form emits create request', () => {
     const request: CreateExpenseRequest = {
       amountInMinorUnits: 4599,
       currency: 'PLN',
@@ -119,8 +112,8 @@ describe('CreateExpenseDialogComponent', () => {
 
     expenseForm.triggerEventHandler('createExpenseEvent', request);
 
-    expect(dialogRefMock.close).toHaveBeenCalledTimes(1);
-    expect(dialogRefMock.close).toHaveBeenCalledWith(request);
+    expect(expensesStoreMock.addExpense).toHaveBeenCalledTimes(1);
+    expect(expensesStoreMock.addExpense).toHaveBeenCalledWith(request);
   });
 
   test('should close dialog without a result when cancelled', () => {
@@ -132,5 +125,81 @@ describe('CreateExpenseDialogComponent', () => {
 
     expect(dialogRefMock.close).toHaveBeenCalledTimes(1);
     expect(dialogRefMock.close).toHaveBeenCalledWith();
+  });
+
+  test('should disable form submission while expense is being created', () => {
+    expensesStoreMock.creating.set(true);
+
+    fixture.detectChanges();
+
+    const submitButton = fixture.nativeElement.querySelector('#expenseFormSubmitButton');
+
+    expect(submitButton.disabled).toBe(true);
+    expect(submitButton.textContent).toContain('Creating...');
+  });
+
+  test('should display submission error', () => {
+    expensesStoreMock.createError.set('Failed to create expense.');
+
+    fixture.detectChanges();
+
+    const error = fixture.nativeElement.querySelector('#expenseFormCreateError');
+
+    expect(error).toBeTruthy();
+    expect(error.textContent).toContain('Failed to create expense.');
+  });
+
+  test('should close dialog after successful expense creation', () => {
+    expensesStoreMock.addExpense.mockImplementation(() => {
+      expensesStoreMock.creating.set(true);
+    });
+
+    const request: CreateExpenseRequest = {
+      amountInMinorUnits: 4599,
+      currency: 'PLN',
+      description: 'Groceries',
+      categoryId: 'food',
+      date: '2026-08-20',
+    };
+
+    const expenseForm = fixture.debugElement.query(By.css('app-expense-form'));
+
+    expenseForm.triggerEventHandler('createExpenseEvent', request);
+
+    expect(dialogRefMock.close).not.toHaveBeenCalled();
+
+    expensesStoreMock.creating.set(false);
+    expensesStoreMock.createError.set(null);
+
+    fixture.detectChanges();
+
+    expect(dialogRefMock.close).toHaveBeenCalledTimes(1);
+  });
+
+  test('should keep dialog open when expense creation fails', () => {
+    const request: CreateExpenseRequest = {
+      amountInMinorUnits: 4599,
+      currency: 'PLN',
+      description: 'Groceries',
+      categoryId: 'food',
+      date: '2026-08-20',
+    };
+
+    const expenseForm = fixture.debugElement.query(By.css('app-expense-form'));
+
+    expenseForm.triggerEventHandler('createExpenseEvent', request);
+
+    expect(expensesStoreMock.creating()).toBe(true);
+
+    expensesStoreMock.creating.set(false);
+    expensesStoreMock.createError.set('Failed to create expense.');
+
+    fixture.detectChanges();
+
+    expect(dialogRefMock.close).not.toHaveBeenCalled();
+
+    const error = fixture.nativeElement.querySelector('#expenseFormCreateError');
+
+    expect(error).toBeTruthy();
   });
 });
