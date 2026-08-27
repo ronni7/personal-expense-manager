@@ -1,0 +1,134 @@
+{
+  "reconstructed": true,
+  "reconstructionNote": "Reconstructed from bundle output data captured in the conversation before CreateExpenseDialogComponent was changed to a dynamic import. This is not the original complete Angular CLI stats.json.",
+  "sourceBuild": {
+    "command": "ng build --stats-json",
+    "routeAnalyzed": "/expenses",
+    "purpose": "Baseline before lazy-loading CreateExpenseDialogComponent"
+  },
+  "outputs": {
+    "chunk-33MHLDIH.js": {
+      "entryPoint": "src/app/features/expenses/pages/expenses-page/expenses-page.ts",
+      "bytes": 263004,
+      "imports": [
+        {
+          "path": "chunk-ZZBZXV35.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunk-7OUACEIT.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "chunk-WAGTDBVM.js",
+          "kind": "import-statement"
+        }
+      ],
+      "exports": ["ExpensesPage"],
+      "inputs": {
+        "node_modules/@angular/cdk/fesm2022/portal.mjs": {
+          "bytesInOutput": 5154
+        },
+        "node_modules/@angular/cdk/fesm2022/overlay-module.mjs": {
+          "bytesInOutput": 40863
+        },
+        "node_modules/@angular/cdk/fesm2022/dialog.mjs": {
+          "bytesInOutput": 10652
+        },
+        "node_modules/@angular/material/fesm2022/dialog-module.mjs": {
+          "bytesInOutput": 16096
+        },
+        "node_modules/@angular/material/fesm2022/sort.mjs": {
+          "bytesInOutput": 8094
+        },
+        "node_modules/@angular/cdk/fesm2022/table.mjs": {
+          "bytesInOutput": 26939
+        },
+        "node_modules/@angular/material/fesm2022/table.mjs": {
+          "bytesInOutput": 9572
+        },
+        "src/app/features/expenses/model/expense-form-value.model.ts": {
+          "bytesInOutput": 161
+        },
+        "node_modules/@angular/material/fesm2022/ripple-loader.mjs": {
+          "bytesInOutput": 2247
+        },
+        "node_modules/@angular/material/fesm2022/icon-button.mjs": {
+          "bytesInOutput": 2719
+        },
+        "node_modules/@angular/material/fesm2022/button.mjs": {
+          "bytesInOutput": 25430
+        },
+        "node_modules/@angular/material/fesm2022/observers/private.mjs": {
+          "bytesInOutput": 1247
+        },
+        "node_modules/@angular/material/fesm2022/form-field2.mjs": {
+          "bytesInOutput": 54838
+        },
+        "node_modules/@angular/cdk/fesm2022/text-field.mjs": {
+          "bytesInOutput": 2215
+        },
+        "node_modules/@angular/material/fesm2022/input-value-accessor.mjs": {
+          "bytesInOutput": 41
+        },
+        "node_modules/@angular/material/fesm2022/error-options.mjs": {
+          "bytesInOutput": 220
+        },
+        "node_modules/@angular/material/fesm2022/error-state.mjs": {
+          "bytesInOutput": 478
+        },
+        "node_modules/@angular/material/fesm2022/input.mjs": {
+          "bytesInOutput": 7040
+        },
+        "node_modules/@angular/material/fesm2022/option.mjs": {
+          "bytesInOutput": 8402
+        },
+        "node_modules/@angular/material/fesm2022/select-module.mjs": {
+          "bytesInOutput": 25021
+        },
+        "src/app/features/expenses/components/expense-form/expense-form.ts": {
+          "bytesInOutput": 5140
+        },
+        "src/app/features/expenses/components/create-expense-dialog/create-expense-dialog.ts": {
+          "bytesInOutput": 1072
+        },
+        "src/app/features/expenses/pages/expenses-page/expense-table-columns.ts": {
+          "bytesInOutput": 87
+        },
+        "src/app/features/expenses/pages/store/expenses-page-store.ts": {
+          "bytesInOutput": 1515
+        },
+        "src/app/features/expenses/pages/expenses-page/expenses-page.ts": {
+          "bytesInOutput": 6155
+        }
+      }
+    },
+    "chunk-WAGTDBVM.js": {
+      "imports": [],
+      "bytes": 212885,
+      "notableInputs": {
+        "node_modules/@angular/core/fesm2022/debug_node.mjs": 97745,
+        "node_modules/@angular/core/fesm2022/root_effect_scheduler.mjs": 18718,
+        "node_modules/@angular/core/fesm2022/core.mjs": 12030,
+        "node_modules/@angular/core/fesm2022/signal.mjs": 4052,
+        "node_modules/rxjs/dist/esm/internal/Subscriber.js": 1571,
+        "node_modules/rxjs/dist/esm/internal/Subscription.js": 1289,
+        "node_modules/rxjs/dist/esm/internal/Subject.js": 1974,
+        "node_modules/rxjs/dist/esm/internal/Observable.js": 935
+      }
+    }
+  },
+  "capturedLighthouseBaseline": {
+    "performance": 0.94,
+    "fcpMs": 2270.7305,
+    "lcpMs": 2676.974,
+    "tbtMs": 13.5,
+    "cls": 0,
+    "speedIndexMs": 2270.7305,
+    "maxPotentialFidMs": 77,
+    "unusedJavaScriptSavingsBytes": 84722,
+    "unusedJavaScriptDisplay": "Est savings of 83 KiB",
+    "javascriptTransferBytes": 194807,
+    "totalByteWeightBytes": 278536
+  }
+}
