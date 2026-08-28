@@ -9,6 +9,7 @@ import { By } from '@angular/platform-browser';
 import { Category } from '../../../categories/model/category.model';
 import { CategoriesStore } from '../../../categories/store/category.store';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { EXPENSE_TABLE_COLUMNS } from '../expenses-page/expense-table-columns';
 
 const categoriesStoreMock = {
   categories: signal<Category[]>([]),
@@ -20,7 +21,7 @@ const expensesStoreMock = {
   expenses: signal<Expense[]>([]),
   loading: signal<boolean>(false),
   error: signal<string | null>(null),
-  createError: signal<boolean>(false),
+  createError: signal<string | null>(null),
   creating: signal<boolean>(false),
   expenseTotal: signal(0),
   incomeTotal: signal(0),
@@ -99,8 +100,6 @@ describe('ExpensesPageStore', () => {
     vi.clearAllMocks();
     TestBed.configureTestingModule({
       providers: [
-        MatDialog,
-        { provide: MatDialogRef, useValue: {} },
         ExpensesPageStore,
         {
           provide: ExpensesStore,
@@ -154,6 +153,15 @@ describe('ExpensesPageStore', () => {
 
     expect(store.error()).toBe('Failed to load expenses.');
   });
+
+  test('should expose error from CategoriesStore', () => {
+    const store = TestBed.inject(ExpensesPageStore);
+
+    categoriesStoreMock.error.set('Failed to load categories.');
+
+    expect(store.error()).toBe('Failed to load categories.');
+  });
+
   test('should combine expenses with their categories', () => {
     const categories: Category[] = [
       {
@@ -344,7 +352,7 @@ describe('ExpensesPageStore', () => {
 
     const store = TestBed.inject(ExpensesPageStore);
 
-    store.setSearchQuery('groceries');
+    store.setSearchQuery('GROCERIES');
 
     expect(store.filteredExpenses().length).toBe(1);
   });
@@ -371,6 +379,7 @@ describe('ExpensesPageStore', () => {
 
     expect(store.sortedExpenses().length).toBe(2);
     expect(store.sortedExpenses()[0].id).toBe('1');
+    expect(store.sortedExpenses().map((expense) => expense.id)).toEqual(['1', '3']);
   });
 });
 
@@ -419,6 +428,15 @@ describe('ExpensesPageUI', () => {
 
     expect(fixture.debugElement.query(By.css('#expensesPageContainer'))).toBeNull();
   });
+
+  test('should expose loading state when categories are loading', () => {
+    const store = TestBed.inject(ExpensesPageStore);
+
+    categoriesStoreMock.loading.set(true);
+
+    expect(store.isLoading()).toBe(true);
+  });
+
   test('should display error state when loading expenses fails', () => {
     expensesStoreMock.error.set('Failed to load expenses.');
 
@@ -439,33 +457,10 @@ describe('ExpensesPageUI', () => {
     expect(noExpensesEl).toBeTruthy();
     expect(noExpensesEl.nativeElement.textContent).toContain('No expenses yet.');
   });
-  test('should display expenses when expenses are available', () => {
-    const expenses: Expense[] = [
-      {
-        id: '1',
-        categoryId: 'food',
-        description: 'Groceries',
-        amountInMinorUnits: 4500,
-        date: '2026-08-10',
-        currency: 'PLN',
-        createdAt: '2026-08-10T18:30:00Z',
-        updatedAt: '2026-08-10T18:30:00Z',
-      },
-    ];
-
-    expensesStoreMock.expenses.set(expenses);
-    expensesStoreMock.expenseCount.set(expenses.length);
-    fixture.detectChanges();
-    const pageStore = fixture.componentRef.injector.get(ExpensesPageStore);
-
-    expensesStoreMock.expenses.set(expenses);
-
-    expect(pageStore.expenses().length).toBe(1);
-    expect(pageStore.expenseCount()).toBe(1);
-  });
 
   //// Mat table related /////
   test('should display all configured expense table columns', () => {
+    const COLUMNS = EXPENSE_TABLE_COLUMNS.map((column) => column.toLowerCase());
     expensesStoreMock.expenses.set([expenses[0]]);
     expensesStoreMock.expenseCount.set(1);
 
@@ -473,11 +468,11 @@ describe('ExpensesPageUI', () => {
 
     const headers = fixture.debugElement.queryAll(By.css('tr[mat-header-row] th'));
 
-    expect(headers.length).toBe(4);
+    expect(headers.length).toBe(COLUMNS.length);
 
     const headerTexts = headers.map((header) => header.nativeElement.textContent.trim());
 
-    expect(headerTexts).toEqual(['Date', 'Description', 'Category', 'Amount']);
+    expect(headerTexts.map((column) => column.toLowerCase())).toEqual(COLUMNS);
   });
   test('should display one table row for each expense', () => {
     expensesStoreMock.expenses.set(expenses);
@@ -525,47 +520,6 @@ describe('ExpensesPageUI', () => {
     expect(fixture.debugElement.query(By.css('#expensesPageNoExpensesText'))).toBeTruthy();
   });
 
-  test('should combine expenses with their categories', () => {
-    const categories: Category[] = [
-      {
-        id: 'food',
-        name: 'Food',
-      },
-      {
-        id: 'bills',
-        name: 'Bills',
-      },
-    ];
-
-    expensesStoreMock.expenses.set(expenses);
-    categoriesStoreMock.categories.set(categories);
-
-    const store = TestBed.inject(ExpensesPageStore);
-
-    expect(store.expensesWithCategory()).toEqual([
-      {
-        ...expenses[0],
-        category: categories[0],
-      },
-      {
-        ...expenses[1],
-        category: categories[1],
-      },
-    ]);
-  });
-  test('should display expenses in the order provided by the store', () => {
-    expensesStoreMock.expenses.set(expenses);
-    expensesStoreMock.expenseCount.set(expenses.length);
-
-    fixture.detectChanges();
-
-    const rows = fixture.debugElement.queryAll(By.css('tr[mat-row]'));
-
-    expect(rows.length).toBe(expenses.length);
-
-    expect(rows[0].nativeElement.textContent).toContain('2026-08-10');
-    expect(rows[1].nativeElement.textContent).toContain('2026-08-09');
-  });
   test('should sort rows when table sort changes', () => {
     expensesStoreMock.expenses.set([
       expenses[0], // 2026-08-10

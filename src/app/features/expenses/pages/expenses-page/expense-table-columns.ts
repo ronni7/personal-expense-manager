@@ -1,4 +1,10 @@
-export const EXPENSE_TABLE_COLUMNS = ['date', 'description', 'category', 'amount'] as const;
+export const EXPENSE_TABLE_COLUMNS = [
+  'date',
+  'description',
+  'category',
+  'amount',
+  'actions',
+] as const;
 
 export type ExpenseTableColumn = (typeof EXPENSE_TABLE_COLUMNS)[number];
 

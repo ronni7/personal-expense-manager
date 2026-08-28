@@ -5,11 +5,21 @@ import { describe, expect, test } from 'vitest';
 import { Category } from '../../../categories/model/category.model';
 import { ExpenseFormComponent } from './expense-form';
 import { mapExpenseFormValueToCreateExpenseRequest } from '../../model/expense-form-value.model';
+import { Expense } from '../../model/expense.model';
 
 describe('ExpenseFormComponent', () => {
   let fixture: ComponentFixture<ExpenseFormComponent>;
   let component: ExpenseFormComponent;
-
+  const expense: Expense = {
+    id: '1',
+    amountInMinorUnits: 4599,
+    currency: 'PLN',
+    description: 'Groceries',
+    categoryId: 'food',
+    date: '2026-08-10',
+    createdAt: '2026-08-10T18:30:00Z',
+    updatedAt: '2026-08-10T18:30:00Z',
+  };
   const categories: Category[] = [
     {
       id: 'food',
@@ -96,15 +106,61 @@ describe('ExpenseFormComponent', () => {
     expect(errors.length).toBe(4);
   });
 
-  test('should display description required error', () => {
-    const form = fixture.debugElement.query(By.css('#expenseForm'));
-
-    form.triggerEventHandler('ngSubmit');
+  test('should populate form with existing expense when editing', () => {
+    fixture.componentRef.setInput('initialValue', expense);
 
     fixture.detectChanges();
 
-    const error = fixture.debugElement.query(By.css('#expenseFormDescriptionErrorRequired'));
+    const descriptionInput = fixture.debugElement.query(
+      By.css('#expenseFormDescription'),
+    ).nativeElement;
+
+    const amountInput = fixture.debugElement.query(By.css('#expenseFormAmount')).nativeElement;
+
+    const categorySelect = fixture.debugElement.query(By.css('#expenseFormCategory')).nativeElement;
+
+    const dateInput = fixture.debugElement.query(By.css('#expenseFormDate')).nativeElement;
+
+    expect(descriptionInput.value).toBe('Groceries');
+    expect(amountInput.value).toBe('45.99');
+    expect(dateInput.value).toBe('2026-08-10');
+    expect(categorySelect.textContent).toContain('Food');
+  });
+  test('should disable submit button while submitting', () => {
+    fixture.componentRef.setInput('isSubmitting', true);
+
+    fixture.detectChanges();
+
+    const submitButton = fixture.debugElement.query(
+      By.css('#expenseFormSubmitButton'),
+    ).nativeElement;
+
+    expect(submitButton.disabled).toBe(true);
+    expect(submitButton.textContent).toContain('Creating...');
+  });
+
+  test('should display updating state while editing and submitting', () => {
+    fixture.componentRef.setInput('initialValue', expense);
+    fixture.componentRef.setInput('isSubmitting', true);
+
+    fixture.detectChanges();
+
+    const submitButton = fixture.debugElement.query(
+      By.css('#expenseFormSubmitButton'),
+    ).nativeElement;
+
+    expect(submitButton.disabled).toBe(true);
+    expect(submitButton.textContent).toContain('Updating...');
+  });
+
+  test('should display submission error', () => {
+    fixture.componentRef.setInput('submissionError', 'Failed to save expense.');
+
+    fixture.detectChanges();
+
+    const error = fixture.nativeElement.querySelector('#expenseFormSaveError');
 
     expect(error).toBeTruthy();
+    expect(error.textContent).toContain('Failed to save expense.');
   });
 });

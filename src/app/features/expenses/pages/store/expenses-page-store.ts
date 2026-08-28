@@ -139,5 +139,8 @@ export const ExpensesPageStore = signalStore(
     addExpense(request: CreateExpenseRequest) {
       store.expensesStore.addExpense(request);
     },
+    updateExpense(id: string, request: CreateExpenseRequest) {
+      store.expensesStore.updateExpense({ id, request });
+    },
   })),
 );

@@ -2,6 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, inject, output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
 import {
   MatCell,
   MatCellDef,
@@ -14,11 +15,12 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { CreateExpenseRequest } from '../../api/create-expense-request.model';
 
+import { ExpenseDialogData } from '../../model/expense-dialog-data.model';
+import { ExpenseFormSubmit } from '../../model/expense-form-submit.model';
+import { Expense } from '../../model/expense.model';
 import { ExpensesPageStore } from '../store/expenses-page-store';
 import { EXPENSE_TABLE_COLUMNS, ExpenseTableColumn } from './expense-table-columns';
-import { CreateExpenseDialogData } from '../../model/create-expense-dialog-data.model';
 
 @Component({
   selector: 'app-expenses-page',
@@ -37,6 +39,7 @@ import { CreateExpenseDialogData } from '../../model/create-expense-dialog-data.
     MatSort,
     MatSortHeader,
     MatDialogModule,
+    MatIconModule,
   ],
   providers: [ExpensesPageStore],
   templateUrl: './expenses-page.html',
@@ -46,10 +49,10 @@ export class ExpensesPage {
   protected readonly expensesPageStore = inject(ExpensesPageStore);
   protected readonly displayedColumns: readonly ExpenseTableColumn[] = EXPENSE_TABLE_COLUMNS;
   private readonly dialog = inject(MatDialog);
-  private readonly data = inject<CreateExpenseDialogData | undefined>(MAT_DIALOG_DATA, {
+  private readonly data = inject<ExpenseDialogData | undefined>(MAT_DIALOG_DATA, {
     optional: true,
   });
-  readonly createExpenseCancel = output<void>();
+  readonly cancelAction = output<void>();
 
   protected readonly categories = this.data?.categories ?? [];
 
@@ -63,30 +66,33 @@ export class ExpensesPage {
     this.expensesPageStore.setSearchQuery(input.value);
   }
 
-  protected onCreateExpense(request: CreateExpenseRequest): void {
-    this.expensesPageStore.addExpense(request);
-  }
+  protected async openExpenseDialog(expense?: Expense): Promise<void> {
+    const { ExpenseDialogComponent: ExpenseDialogComponent } =
+      await import('../../components/expense-dialog/expense-dialog');
 
-  protected async openCreateExpenseDialog(): Promise<void> {
-    const { CreateExpenseDialogComponent } =
-      await import('../../components/create-expense-dialog/create-expense-dialog');
-
-    const dialogRef = this.dialog.open(CreateExpenseDialogComponent, {
+    const dialogRef = this.dialog.open(ExpenseDialogComponent, {
       width: '500px',
       maxWidth: '95vw',
       height: 'min(800px, 95vh)',
       panelClass: 'expense-create-dialog',
       data: {
         categories: this.expensesPageStore.categories(),
+        expense,
       },
     });
 
-    dialogRef.afterClosed().subscribe((request?: CreateExpenseRequest) => {
-      if (!request) {
+    dialogRef.afterClosed().subscribe((result?: ExpenseFormSubmit) => {
+      if (!result) {
         return;
       }
 
-      this.expensesPageStore.addExpense(request);
+      if (result.id) {
+        this.expensesPageStore.updateExpense(result.id, result.request);
+
+        return;
+      }
+
+      this.expensesPageStore.addExpense(result.request);
     });
   }
 }

@@ -7,6 +7,7 @@ import { pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { CreateExpenseRequest } from '../api/create-expense-request.model';
 import { mapExpenseDtoToExpense } from '../api/expense.mapper';
+import { UpdateExpenseRequest } from '../api/update-expense-request.model';
 
 interface ExpensesState {
   expenses: Expense[];
@@ -14,6 +15,8 @@ interface ExpensesState {
   creating: boolean;
   error: string | null;
   createError: string | null;
+  updating: boolean;
+  updateError: string | null;
 }
 
 const initialState: ExpensesState = {
@@ -22,6 +25,8 @@ const initialState: ExpensesState = {
   creating: false,
   error: null,
   createError: null,
+  updating: false,
+  updateError: null,
 };
 
 export const ExpensesStore = signalStore(
@@ -104,6 +109,43 @@ export const ExpensesStore = signalStore(
                 patchState(store, {
                   creating: false,
                   createError: 'Failed to create expense.',
+                });
+              },
+            }),
+          ),
+        ),
+      ),
+    ),
+    updateExpense: rxMethod<{
+      id: string;
+      request: UpdateExpenseRequest;
+    }>(
+      pipe(
+        tap(() => {
+          patchState(store, {
+            updating: true,
+            updateError: null,
+          });
+        }),
+
+        switchMap(({ id, request }) =>
+          expensesApi.updateExpense(id, request).pipe(
+            tapResponse({
+              next: (dto) => {
+                const expense = mapExpenseDtoToExpense(dto);
+
+                patchState(store, (state) => ({
+                  expenses: state.expenses.map((currentExpense) =>
+                    currentExpense.id === expense.id ? expense : currentExpense,
+                  ),
+                  updating: false,
+                }));
+              },
+
+              error: () => {
+                patchState(store, {
+                  updating: false,
+                  updateError: 'Failed to update expense.',
                 });
               },
             }),

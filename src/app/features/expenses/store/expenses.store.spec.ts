@@ -9,6 +9,7 @@ import { ExpenseDto } from '../api/expense.dto';
 import { Expense } from '../model/expense.model';
 import { ExpensesStore } from './expense.store';
 import { mapExpenseDtoToExpense } from '../api/expense.mapper';
+import { UpdateExpenseRequest } from '../api/update-expense-request.model';
 
 describe('ExpensesStore', () => {
   const negativeExpenses: Expense[] = [
@@ -55,14 +56,28 @@ describe('ExpensesStore', () => {
       updatedAt: '2026-08-07T07:45:00Z',
     },
   ];
-
+  const updatedExpenseDto: ExpenseDto = {
+    ...mockExpenses[0],
+    description: 'Updated groceries',
+    amountInMinorUnits: 5000,
+    updatedAt: '2026-08-20T20:00:00Z',
+  };
   const expensesApi = {
     getExpenses: vi.fn(() => of(mockExpenses)),
     getNegativeExpenses: vi.fn(() => of(negativeExpenses)),
     createExpense: vi.fn(),
+    updateExpense: vi.fn(),
   };
   const now = new Date().toISOString();
   const createExpenseRequest: CreateExpenseRequest = {
+    amountInMinorUnits: 2500,
+    currency: 'PLN',
+    description: 'Lunch',
+    categoryId: 'food',
+    date: '2026-08-10',
+  };
+
+  const updateExpenseRequest: UpdateExpenseRequest = {
     amountInMinorUnits: 2500,
     currency: 'PLN',
     description: 'Lunch',
@@ -97,6 +112,8 @@ describe('ExpensesStore', () => {
 
     expect(store.creating()).toBe(false);
     expect(store.createError()).toBeNull();
+    expect(store.updating()).toBe(false);
+    expect(store.updateError()).toBeNull();
     expect(store.expenses()).toEqual([]);
     expect(store.loading()).toBe(false);
     expect(store.error()).toBeNull();
@@ -462,5 +479,57 @@ describe('ExpensesStore', () => {
 
     expect(store.creating()).toBe(false);
     expect(store.createError()).toBeNull();
+  });
+
+  test('should update existing expense in state', () => {
+    const response$ = new Subject<ExpenseDto>();
+
+    vi.mocked(expensesApi.updateExpense).mockReturnValue(response$);
+
+    const store = TestBed.inject(ExpensesStore);
+
+    patchState(unprotected(store), {
+      expenses: mockExpenses,
+    });
+
+    store.updateExpense({
+      id: '1',
+      request: updateExpenseRequest,
+    });
+
+    response$.next(updatedExpenseDto);
+    response$.complete();
+
+    expect(store.expenses()).toEqual([
+      mapExpenseDtoToExpense(updatedExpenseDto),
+      mockExpenses[1],
+      mockExpenses[2],
+    ]);
+
+    expect(store.updating()).toBe(false);
+    expect(store.updateError()).toBeNull();
+  });
+
+  test('should preserve expenses when updating a non-existing expense fails', () => {
+    const response$ = new Subject<ExpenseDto>();
+
+    vi.mocked(expensesApi.updateExpense).mockReturnValue(response$);
+
+    const store = TestBed.inject(ExpensesStore);
+
+    patchState(unprotected(store), {
+      expenses: mockExpenses,
+    });
+
+    store.updateExpense({
+      id: 'non-existing-id',
+      request: updateExpenseRequest,
+    });
+
+    response$.error(new Error('Expense not found'));
+
+    expect(store.expenses()).toEqual(mockExpenses);
+    expect(store.updating()).toBe(false);
+    expect(store.updateError()).toBe('Failed to update expense.');
   });
 });

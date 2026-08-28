@@ -6,7 +6,7 @@
 >
   <div id="expenseFormFieldsContainer" class="flex flex-col gap-5 flex-1">
     @if (submissionError(); as errorMessage) {
-      <p id="expenseFormCreateError" class="text-sm text-red-500">
+      <p id="expenseFormSaveError" class="text-sm text-red-500">
         {{ errorMessage }}
       </p>
     }
@@ -90,10 +90,18 @@
     </button>
 
     <button id="expenseFormSubmitButton" mat-flat-button type="submit" [disabled]="isSubmitting()">
-      @if (isSubmitting()) {
-        Creating...
+      @if (initialValue()) {
+        @if (isSubmitting()) {
+          Updating...
+        } @else {
+          Update expense
+        }
       } @else {
-        Create expense
+        @if (isSubmitting()) {
+          Creating...
+        } @else {
+          Create expense
+        }
       }
     </button>
   </div>

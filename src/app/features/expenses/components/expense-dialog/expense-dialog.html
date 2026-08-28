@@ -1,10 +1,13 @@
-<h2 mat-dialog-title>Create expense</h2>
+<h2 mat-dialog-title>
+  {{ data.expense ? 'Edit expense' : 'Create expense' }}
+</h2>
 
 <mat-dialog-content class="expense-create-dialog h-full flex flex-1 flex-col">
   <app-expense-form
     [categories]="data.categories"
-    (createExpenseEvent)="onCreateExpense($event)"
-    (createExpenseCancel)="onCancel()"
+    [initialValue]="data.expense"
+    (save)="onSave($event)"
+    (cancelAction)="onCancel()"
     [isSubmitting]="expensesStore.creating()"
     [submissionError]="expensesStore.createError()"
   />
