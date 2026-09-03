@@ -1,0 +1,76 @@
+<form id="budgetForm" [formGroup]="form" (ngSubmit)="onSubmit()" class="flex h-full flex-col gap-5">
+  <div id="budgetFormFieldsContainer" class="flex flex-1 flex-col gap-5">
+    @if (submissionError(); as errorMessage) {
+      <p id="budgetFormSaveError" class="text-sm text-red-500">{{ errorMessage }}</p>
+    }
+
+    <mat-form-field id="budgetFormCategoryField" appearance="fill">
+      <mat-label id="budgetFormCategoryLabel">Category</mat-label>
+      <mat-select id="budgetFormCategory" formControlName="categoryId">
+        @for (category of categories(); track category.id) {
+          <mat-option id="budgetFormCategoryOption-{{ category.id }}" [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+        }
+      </mat-select>
+
+      @if (form.controls.categoryId.hasError('required')) {
+        <mat-error id="budgetFormCategoryError">Category is required.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field id="budgetFormMonthField" appearance="fill">
+      <mat-label id="budgetFormMonthLabel">Month</mat-label>
+      <input id="budgetFormMonth" matInput type="month" formControlName="month" />
+
+      @if (form.controls.month.hasError('required')) {
+        <mat-error id="budgetFormMonthErrorRequired">Month is required.</mat-error>
+      } @else if (form.controls.month.hasError('pattern')) {
+        <mat-error id="budgetFormMonthErrorPattern">Use a valid month format: YYYY-MM.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field id="budgetFormAmountField" appearance="fill">
+      <mat-label id="budgetFormAmountLabel">Monthly budget</mat-label>
+      <input
+        id="budgetFormAmount"
+        matInput
+        type="number"
+        step="0.01"
+        min="0.01"
+        formControlName="amount"
+        placeholder="0.00"
+      />
+
+      @if (form.controls.amount.hasError('required')) {
+        <mat-error id="budgetFormAmountErrorRequired">Budget amount is required.</mat-error>
+      } @else if (form.controls.amount.hasError('invalidBudget')) {
+        <mat-error id="budgetFormAmountErrorInvalidBudget"
+          >Budget must be greater than 0.</mat-error
+        >
+      }
+    </mat-form-field>
+  </div>
+
+  <div id="budgetFormButtonContainer" class="flex justify-end gap-3 pt-2">
+    <button id="budgetFormCancelButton" mat-stroked-button type="button" (click)="onCancel()">
+      Cancel
+    </button>
+
+    <button id="budgetFormSubmitButton" mat-flat-button type="submit" [disabled]="isSubmitting()">
+      @if (initialValue()) {
+        @if (isSubmitting()) {
+          Updating...
+        } @else {
+          Update budget
+        }
+      } @else {
+        @if (isSubmitting()) {
+          Creating...
+        } @else {
+          Create budget
+        }
+      }
+    </button>
+  </div>
+</form>

@@ -15,4 +15,8 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/expenses/pages/expenses-page/expenses-page').then((m) => m.ExpensesPage),
   },
+  {
+    path: 'budgets',
+    loadChildren: () => import('./features/budgets/budgets.routes').then((m) => m.BUDGETS_ROUTES),
+  },
 ];

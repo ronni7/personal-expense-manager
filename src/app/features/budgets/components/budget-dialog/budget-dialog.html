@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>{{ data.budget ? 'Edit budget' : 'Create budget' }}</h2>
+
+<mat-dialog-content class="h-full flex flex-1 flex-col">
+  <app-budget-form
+    [categories]="data.categories"
+    [initialValue]="data.budget"
+    (save)="onSave($event)"
+    (cancelAction)="onCancel()"
+  />
+</mat-dialog-content>

@@ -1,0 +1,178 @@
+@if (budgetsPageStore.isLoading()) {
+  <p id="budgetsPageLoadingText" class="text-2xl">Loading budgets...</p>
+} @else if (budgetsPageStore.error(); as error) {
+  <p id="budgetsPageErrorText" class="text-2xl text-red-500">{{ error }}</p>
+} @else {
+  <main id="budgetsPageContainer" class="mx-auto max-w-6xl space-y-6 p-6">
+    <header
+      id="budgetsPageHeader"
+      class="flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div>
+        <h1 id="budgetsPageTitle" class="text-2xl font-semibold">Budgets</h1>
+        <p id="budgetsPageSubtitle" class="text-sm text-gray-500">
+          Track monthly spending by category.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <input
+          id="budgetsPageMonthFilter"
+          class="rounded-xl border px-3 py-2"
+          type="month"
+          [value]="budgetsPageStore.selectedMonth()"
+          (input)="onMonthChange($event)"
+        />
+        <button
+          id="budgetsPageCreateBudgetButton"
+          mat-flat-button
+          type="button"
+          (click)="openBudgetDialog()"
+        >
+          Add budget
+        </button>
+      </div>
+    </header>
+
+    <section id="budgetsPageOverviewSection" class="grid gap-4 md:grid-cols-3">
+      <mat-card id="budgetsPageBudgetTotalCard">
+        <mat-card-content>
+          <p class="text-sm uppercase tracking-wide text-gray-500">Total budget</p>
+          <p id="budgetsPageBudgetTotal" class="mt-3 text-3xl font-semibold">
+            {{ budgetsPageStore.totalBudget() / 100 | currency: 'PLN' }}
+          </p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card id="budgetsPageSpentTotalCard">
+        <mat-card-content>
+          <p class="text-sm uppercase tracking-wide text-gray-500">Spent</p>
+          <p id="budgetsPageSpentTotal" class="mt-3 text-3xl font-semibold text-red-500">
+            {{ budgetsPageStore.totalSpent() / 100 | currency: 'PLN' }}
+          </p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card id="budgetsPageRemainingTotalCard">
+        <mat-card-content>
+          <p class="text-sm uppercase tracking-wide text-gray-500">Remaining</p>
+          <p
+            id="budgetsPageRemainingTotal"
+            class="mt-3 text-3xl font-semibold"
+            [class.text-red-500]="budgetsPageStore.remainingTotal() < 0"
+            [class.text-emerald-600]="budgetsPageStore.remainingTotal() >= 0"
+          >
+            {{ budgetsPageStore.remainingTotal() / 100 | currency: 'PLN' }}
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </section>
+
+    <mat-card id="budgetsPageProgressCard">
+      <mat-card-content>
+        <div class="mb-2 flex items-center justify-between">
+          <span class="font-medium">Monthly usage</span>
+          <span id="budgetsPageProgressText"
+            >{{ budgetsPageStore.percentUsed() | number: '1.0-0' }}%</span
+          >
+        </div>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="budgetsPageStore.percentUsed()"
+          color="primary"
+        ></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+
+    @if (budgetsPageStore.isEmpty()) {
+      <div
+        id="budgetsPageEmptyState"
+        class="rounded-2xl border border-dashed border-slate-300 p-12 text-center text-gray-500"
+      >
+        No monthly budgets yet. Add one to start tracking your monthly spending.
+      </div>
+    } @else {
+      <section id="budgetsPageListSection" class="space-y-4">
+        @for (row of budgetsPageStore.categoryBudgetRows(); track row.category.id) {
+          <mat-card id="budgetCategoryCard-{{ row.category.id }}">
+            <mat-card-content class="space-y-3">
+              <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3
+                    id="budgetsPageCategoryTitle-{{ row.category.id }}"
+                    class="text-lg font-semibold"
+                  >
+                    {{ row.category.name }}
+                  </h3>
+                  <p
+                    id="budgetsPageCategorySpent-{{ row.category.id }}"
+                    class="text-sm text-gray-500"
+                  >
+                    Spent {{ row.spent / 100 | currency: 'PLN' }} of
+                    {{ (row.budget?.amountInMinorUnits ?? 0) / 100 | currency: 'PLN' }}
+                  </p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  @if (row.budget) {
+                    <button
+                      id="budgetsPageEditBudgetButton-{{ row.category.id }}"
+                      mat-icon-button
+                      type="button"
+                      aria-label="Edit budget"
+                      (click)="openBudgetDialog(row.budget)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button
+                      id="budgetsPageDeleteBudgetButton-{{ row.category.id }}"
+                      mat-icon-button
+                      type="button"
+                      aria-label="Delete budget"
+                      (click)="deleteBudget(row.budget)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  } @else {
+                    <button
+                      mat-icon-button
+                      type="button"
+                      aria-label="Add budget"
+                      (click)="openBudgetDialog()"
+                    >
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  }
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <mat-progress-bar
+                  mode="determinate"
+                  [value]="row.progress"
+                  [color]="row.overBudget ? 'warn' : 'primary'"
+                ></mat-progress-bar>
+                <div class="flex items-center justify-between text-sm">
+                  <span
+                    id="budgetsPageCategoryRemaining-{{ row.category.id }}"
+                    [class.text-red-500]="row.remaining < 0"
+                    [class.text-emerald-600]="row.remaining >= 0"
+                  >
+                    {{ row.remaining / 100 | currency: 'PLN' }} remaining
+                  </span>
+                  <span
+                    id="budgetsPageCategoryStatus-{{ row.category.id }}"
+                    [class.text-red-500]="row.overBudget"
+                    [class.text-emerald-600]="!row.overBudget"
+                  >
+                    {{ row.overBudget ? 'Over budget' : 'On track' }}
+                  </span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </section>
+    }
+  </main>
+}
