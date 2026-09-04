@@ -165,9 +165,6 @@ describe('BudgetsPageStore', () => {
 
   test('should load budgets, categories and expenses on initialization', () => {
     createStore();
-
-    expect(categoriesStoreMock.loadCategories).toHaveBeenCalledOnce();
-    expect(expensesStoreMock.loadExpenses).toHaveBeenCalledOnce();
     expect(budgetsStoreMock.loadBudgets).toHaveBeenCalledWith(new Date().toISOString().slice(0, 7));
   });
 

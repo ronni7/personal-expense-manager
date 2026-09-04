@@ -41,7 +41,7 @@ import { EXPENSE_TABLE_COLUMNS, ExpenseTableColumn } from './expense-table-colum
     MatDialogModule,
     MatIconModule,
   ],
-  providers: [ExpensesPageStore],
+  providers: [],
   templateUrl: './expenses-page.html',
   styleUrl: './expenses-page.scss',
 })

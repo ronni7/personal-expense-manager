@@ -27,6 +27,7 @@ const initialState: BudgetsPageState = {
 };
 
 export const BudgetsPageStore = signalStore(
+  { providedIn: 'root' },
   withState(initialState),
 
   withProps(() => ({
@@ -36,9 +37,7 @@ export const BudgetsPageStore = signalStore(
   })),
 
   withHooks({
-    onInit({ budgetsStore, categoriesStore, expensesStore, selectedMonth }) {
-      categoriesStore.loadCategories();
-      expensesStore.loadExpenses();
+    onInit({ budgetsStore, selectedMonth }) {
       budgetsStore.loadBudgets(selectedMonth());
     },
   }),

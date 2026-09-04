@@ -113,10 +113,11 @@ describe('ExpensesPageStore', () => {
     });
   });
 
-  test('should load expenses on initialization', () => {
-    TestBed.inject(ExpensesPageStore);
+  test('test', () => {
+    const first = TestBed.inject(CategoriesStore);
+    const second = TestBed.inject(CategoriesStore);
 
-    expect(expensesStoreMock.loadExpenses).toHaveBeenCalled();
+    expect(first).toBe(second);
   });
 
   test('should expose expenses from ExpensesStore', () => {

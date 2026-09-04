@@ -7,11 +7,11 @@ import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { Category } from '../../../categories/model/category.model';
 import { BudgetDialogComponent } from '../../components/budget-dialog/budget-dialog';
-import { Budget } from '../../model/budget.model';
+import { BudgetFormSubmit } from '../../model/budget-form-submit.model';
 import { BudgetWithCategory } from '../../model/budget-with-category.model';
+import { Budget } from '../../model/budget.model';
 import { BudgetsPageStore } from '../store/budgets-page-store';
 import { BudgetsPage } from './budgets-page';
-import { BudgetFormSubmit } from '../../model/budget-form-submit.model';
 
 describe('BudgetsPage', () => {
   let fixture: ComponentFixture<BudgetsPage>;

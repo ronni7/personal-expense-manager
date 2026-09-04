@@ -71,6 +71,13 @@ describe('DashboardPage', () => {
     expect(component).toBeTruthy();
   });
 
+  test('should create', () => {
+    const first = TestBed.inject(CategoriesStore);
+    const second = TestBed.inject(CategoriesStore);
+
+    expect(first).toBe(second);
+  });
+
   test('should display loading state while dashboard data is loading', () => {
     expensesStoreMock.loading.set(true);
 

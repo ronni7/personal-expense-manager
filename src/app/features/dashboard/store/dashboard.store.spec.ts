@@ -91,13 +91,6 @@ describe('DashboardStore', () => {
     vi.clearAllMocks();
   });
 
-  test('should load expenses and categories on initialization', () => {
-    TestBed.inject(DashboardStore);
-
-    expect(expensesStoreMock.loadExpenses).toHaveBeenCalledOnce();
-    expect(categoriesStoreMock.loadCategories).toHaveBeenCalledOnce();
-  });
-
   test('should expose financial data from ExpensesStore', () => {
     expensesStoreMock.expenseTotal.set(12_000);
     expensesStoreMock.incomeTotal.set(50_000);

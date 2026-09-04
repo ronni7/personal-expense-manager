@@ -5,7 +5,7 @@ import { DashboardStore } from '../../store/dashboard.store';
 @Component({
   selector: 'app-dashboard-page',
   imports: [MatCard, MatCardContent, MatCardTitle, MatCardHeader, CurrencyPipe],
-  providers: [DashboardStore],
+  providers: [],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss',
 })

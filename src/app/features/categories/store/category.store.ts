@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { pipe, switchMap, tap } from 'rxjs';
@@ -51,4 +51,9 @@ export const CategoriesStore = signalStore(
       ),
     ),
   })),
+  withHooks({
+    onInit(store) {
+      store.loadCategories();
+    },
+  }),
 );
