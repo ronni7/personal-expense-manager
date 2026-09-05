@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { pipe, switchMap, tap } from 'rxjs';
@@ -11,12 +11,14 @@ interface CategoriesState {
   categories: Category[];
   loading: boolean;
   error: string | null;
+  loaded: boolean;
 }
 
 const initialState: CategoriesState = {
   categories: [],
   loading: false,
   error: null,
+  loaded: false,
 };
 
 export const CategoriesStore = signalStore(
@@ -39,6 +41,7 @@ export const CategoriesStore = signalStore(
             patchState(store, {
               categories,
               loading: false,
+              loaded: true,
             });
           },
           error: () => {
@@ -51,9 +54,13 @@ export const CategoriesStore = signalStore(
       ),
     ),
   })),
-  withHooks({
-    onInit(store) {
+
+  withMethods((store) => ({
+    ensureLoaded(): void {
+      if (store.loaded() || store.loading()) {
+        return;
+      }
       store.loadCategories();
     },
-  }),
+  })),
 );

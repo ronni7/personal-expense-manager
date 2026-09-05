@@ -1,5 +1,5 @@
 import { computed, inject } from '@angular/core';
-import { signalStore, withComputed, withProps } from '@ngrx/signals';
+import { signalStore, withComputed, withProps, withHooks } from '@ngrx/signals';
 
 import { CategoriesStore } from '../../categories/store/category.store';
 import { ExpensesStore } from '../../expenses/store/expense.store';
@@ -12,12 +12,12 @@ export const DashboardStore = signalStore(
     categoriesStore: inject(CategoriesStore),
   })),
 
-  // withHooks({
-  //   onInit({ expensesStore, categoriesStore }) {
-  //     expensesStore.loadExpenses();
-  //     categoriesStore.loadCategories();
-  //   },
-  // }),
+  withHooks({
+    onInit({ expensesStore, categoriesStore }) {
+      expensesStore.ensureLoaded();
+      categoriesStore.ensureLoaded();
+    },
+  }),
 
   withComputed(({ expensesStore, categoriesStore }) => ({
     isLoading: computed(() => expensesStore.loading() || categoriesStore.loading()),

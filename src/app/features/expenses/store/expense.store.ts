@@ -17,6 +17,7 @@ interface ExpensesState {
   createError: string | null;
   updating: boolean;
   updateError: string | null;
+  loaded: boolean;
 }
 
 const initialState: ExpensesState = {
@@ -27,6 +28,7 @@ const initialState: ExpensesState = {
   createError: null,
   updating: false,
   updateError: null,
+  loaded: false,
 };
 
 export const ExpensesStore = signalStore(
@@ -73,6 +75,7 @@ export const ExpensesStore = signalStore(
             patchState(store, {
               expenses,
               loading: false,
+              loaded: true,
             });
           },
           error: () => {
@@ -153,5 +156,13 @@ export const ExpensesStore = signalStore(
         ),
       ),
     ),
+  })),
+  withMethods((store) => ({
+    ensureLoaded(): void {
+      if (store.loaded() || store.loading()) {
+        return;
+      }
+      store.loadExpenses();
+    },
   })),
 );

@@ -23,6 +23,7 @@ describe('DashboardPage', () => {
     balance: signal(0),
     totalExpensesAmountInMinorUnits: signal(0),
     loadExpenses: vi.fn(),
+    ensureLoaded: vi.fn(),
   };
 
   const categoriesStoreMock = {
@@ -30,6 +31,7 @@ describe('DashboardPage', () => {
     loading: signal<boolean>(false),
     error: signal<string | null>(null),
     loadCategories: vi.fn(),
+    ensureLoaded: vi.fn(),
   };
 
   beforeEach(async () => {

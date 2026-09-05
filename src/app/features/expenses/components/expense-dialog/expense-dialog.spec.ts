@@ -22,6 +22,7 @@ describe('ExpenseDialogComponent', () => {
     creating: signal(false),
     createError: signal<string | null>(null),
     addExpense: vi.fn(),
+    ensureLoaded: vi.fn(),
   };
 
   const categories: Category[] = [

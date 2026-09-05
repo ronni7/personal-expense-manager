@@ -37,7 +37,9 @@ export const BudgetsPageStore = signalStore(
   })),
 
   withHooks({
-    onInit({ budgetsStore, selectedMonth }) {
+    onInit({ expensesStore, categoriesStore, budgetsStore, selectedMonth }) {
+      expensesStore.ensureLoaded();
+      categoriesStore.ensureLoaded();
       budgetsStore.loadBudgets(selectedMonth());
     },
   }),

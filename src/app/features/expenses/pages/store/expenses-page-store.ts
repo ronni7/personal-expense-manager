@@ -37,8 +37,9 @@ export const ExpensesPageStore = signalStore(
   })),
 
   withHooks({
-    onInit({ expensesStore }) {
-      expensesStore.loadExpenses();
+    onInit({ expensesStore, categoriesStore }) {
+      expensesStore.ensureLoaded();
+      categoriesStore.ensureLoaded();
     },
   }),
 

@@ -28,6 +28,7 @@ describe('BudgetsPageStore', () => {
     loading: signal(false),
     error: signal<string | null>(null),
     loadCategories: vi.fn().mockReturnValue(of(undefined)),
+    ensureLoaded: vi.fn(),
   };
 
   const expensesStoreMock = {
@@ -35,6 +36,7 @@ describe('BudgetsPageStore', () => {
     loading: signal(false),
     error: signal<string | null>(null),
     loadExpenses: vi.fn().mockReturnValue(of(undefined)),
+    ensureLoaded: vi.fn(),
   };
 
   const categories: Category[] = [

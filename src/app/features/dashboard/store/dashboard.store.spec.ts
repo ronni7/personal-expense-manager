@@ -50,6 +50,7 @@ describe('DashboardStore', () => {
     balance: signal<number>(0),
     totalExpensesAmountInMinorUnits: signal<number>(0),
     loadExpenses: vi.fn(),
+    ensureLoaded: vi.fn(),
   };
 
   const categoriesStoreMock = {
@@ -57,6 +58,7 @@ describe('DashboardStore', () => {
     loading: signal<boolean>(false),
     error: signal<string | null>(null),
     loadCategories: vi.fn(),
+    ensureLoaded: vi.fn(),
   };
 
   beforeEach(() => {

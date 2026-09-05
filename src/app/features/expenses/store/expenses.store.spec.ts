@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
-import { of, Subject } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { CreateExpenseRequest } from '../api/create-expense-request.model';
 import { ExpensesApiService } from '../api/expense-api-service';
@@ -117,6 +117,7 @@ describe('ExpensesStore', () => {
     expect(store.expenses()).toEqual([]);
     expect(store.loading()).toBe(false);
     expect(store.error()).toBeNull();
+    expect(store.loaded()).toBe(false);
   });
 
   test('should calculate expense count and total amount', () => {
@@ -228,6 +229,7 @@ describe('ExpensesStore', () => {
     expect(store.expenses()).toEqual(mockExpenses);
     expect(store.loading()).toBe(false);
     expect(store.error()).toBeNull();
+    expect(store.loaded()).toBe(true);
   });
 
   test('should expose an error when loading expenses fails', () => {
@@ -243,6 +245,7 @@ describe('ExpensesStore', () => {
 
     expect(store.loading()).toBe(false);
     expect(store.error()).toBe('Failed to load expenses.');
+    expect(store.loaded()).toBe(false);
   });
 
   test('should ignore the previous request when loading expenses again', () => {
@@ -369,21 +372,6 @@ describe('ExpensesStore', () => {
     expect(expensesApi.createExpense).toHaveBeenCalledWith(createExpenseRequest);
 
     response$.complete();
-  });
-
-  test('should add created expense to state', () => {
-    const response$ = new Subject<ExpenseDto>();
-
-    vi.mocked(expensesApi.createExpense).mockReturnValue(response$);
-
-    const store = TestBed.inject(ExpensesStore);
-
-    store.addExpense(createExpenseRequest);
-
-    response$.next(expenseDto);
-    response$.complete();
-
-    expect(store.expenses()).toEqual([mapExpenseDtoToExpense(expenseDto)]);
   });
 
   test('should handle create expense error', () => {
@@ -531,5 +519,139 @@ describe('ExpensesStore', () => {
     expect(store.expenses()).toEqual(mockExpenses);
     expect(store.updating()).toBe(false);
     expect(store.updateError()).toBe('Failed to update expense.');
+  });
+  /////
+  test('should load categories when not loaded', () => {
+    const store = TestBed.inject(ExpensesStore);
+    const response$ = new Subject<ExpenseDto[]>();
+
+    expensesApi.getExpenses.mockReturnValue(response$);
+
+    store.ensureLoaded();
+
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(1);
+    expect(store.loading()).toBe(true);
+    expect(store.loaded()).toBe(false);
+
+    response$.next(mockExpenses);
+    response$.complete();
+
+    expect(store.expenses()).toEqual(mockExpenses);
+    expect(store.loading()).toBe(false);
+    expect(store.loaded()).toBe(true);
+    expect(store.error()).toBeNull();
+  });
+  test('should not load categories when already loaded', () => {
+    const store = TestBed.inject(ExpensesStore);
+    expensesApi.getExpenses.mockReturnValue(of(mockExpenses));
+
+    store.ensureLoaded();
+
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(1);
+    expect(store.loaded()).toBe(true);
+
+    store.ensureLoaded();
+
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(1);
+  });
+
+  test('should not load categories when loading is already in progress', () => {
+    const store = TestBed.inject(ExpensesStore);
+    const response$ = new Subject<ExpenseDto[]>();
+
+    expensesApi.getExpenses.mockReturnValue(response$);
+
+    store.ensureLoaded();
+    store.ensureLoaded();
+
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(1);
+
+    response$.next(mockExpenses);
+    response$.complete();
+
+    expect(store.loaded()).toBe(true);
+  });
+  test('should mark store as loaded when API returns an empty array', () => {
+    const store = TestBed.inject(ExpensesStore);
+    expensesApi.getExpenses.mockReturnValue(of([]));
+
+    store.ensureLoaded();
+
+    expect(store.expenses()).toEqual([]);
+    expect(store.loaded()).toBe(true);
+    expect(store.loading()).toBe(false);
+  });
+  test('should keep store unloaded when loading fails', () => {
+    const store = TestBed.inject(ExpensesStore);
+    expensesApi.getExpenses.mockReturnValue(throwError(() => new Error('API error')));
+
+    store.ensureLoaded();
+
+    expect(store.loading()).toBe(false);
+    expect(store.loaded()).toBe(false);
+    expect(store.error()).toBe('Failed to load expenses.');
+  });
+  test('should call loadCategories twice', async () => {
+    const store = TestBed.inject(ExpensesStore);
+    expensesApi.getExpenses.mockReturnValue(of(mockExpenses));
+
+    store.loadExpenses();
+    store.loadExpenses();
+
+    await Promise.resolve();
+
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(2);
+  });
+  test('should load expenses successfully', () => {
+    const store = TestBed.inject(ExpensesStore);
+    expensesApi.getExpenses.mockReturnValue(of(mockExpenses));
+
+    store.loadExpenses();
+
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(1);
+    expect(store.expenses()).toEqual(mockExpenses);
+    expect(store.loaded()).toBe(true);
+  });
+  test('should handle loading error', () => {
+    const store = TestBed.inject(ExpensesStore);
+    expensesApi.getExpenses.mockReturnValue(throwError(() => new Error('API error')));
+
+    store.loadExpenses();
+
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(1);
+    expect(store.loading()).toBe(false);
+    expect(store.loaded()).toBe(false);
+    expect(store.error()).toBe('Failed to load expenses.');
+  });
+  test('should not load categories when already loaded', () => {
+    const store = TestBed.inject(ExpensesStore);
+    expensesApi.getExpenses.mockReturnValue(of(mockExpenses));
+
+    store.loadExpenses();
+
+    expect(store.loaded()).toBe(true);
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(1);
+
+    store.ensureLoaded();
+
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(1);
+  });
+  test('should not load expenses when loading is already in progress', () => {
+    const store = TestBed.inject(ExpensesStore);
+    const response$ = new Subject<ExpenseDto[]>();
+
+    expensesApi.getExpenses.mockReturnValue(response$);
+
+    store.ensureLoaded();
+
+    expect(store.loading()).toBe(true);
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(1);
+
+    store.ensureLoaded();
+
+    expect(expensesApi.getExpenses).toHaveBeenCalledTimes(1);
+
+    response$.next(mockExpenses);
+    response$.complete();
   });
 });

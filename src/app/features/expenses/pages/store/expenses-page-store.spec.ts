@@ -16,6 +16,7 @@ const categoriesStoreMock = {
   loading: signal<boolean>(false),
   error: signal<string | null>(null),
   loadCategories: vi.fn(),
+  ensureLoaded: vi.fn(),
 };
 const expensesStoreMock = {
   expenses: signal<Expense[]>([]),
@@ -29,6 +30,7 @@ const expensesStoreMock = {
   balance: signal(0),
   totalExpensesAmountInMinorUnits: signal(0),
   loadExpenses: vi.fn(),
+  ensureLoaded: vi.fn(),
 };
 
 const expenses: Expense[] = [
