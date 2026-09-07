@@ -1,0 +1,59 @@
+<section
+  class="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-8"
+>
+  <div class="w-full max-w-md">
+    <!-- Card Container -->
+    <div class="bg-white rounded-lg shadow-lg p-8 sm:p-10">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-2">Welcome Back</h1>
+        <p class="text-base text-slate-600">Sign in to your account to continue</p>
+      </div>
+
+      <!-- Login Button -->
+      <button
+        type="button"
+        (click)="login()"
+        aria-label="Sign in with Keycloak authentication"
+        class="w-full bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 active:bg-blue-800 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105"
+      >
+        <span class="flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path
+              fill-rule="evenodd"
+              d="M10 0a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm3.707 5.293a1 1 0 0 0-1.414-1.414L9 9.586 7.707 8.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Login with Keycloak
+        </span>
+      </button>
+
+      <!-- Footer Text -->
+      <div class="mt-8 pt-6 border-t border-slate-200">
+        <p class="text-center text-sm text-slate-600">
+          Having trouble?
+          <a
+            href="#/help"
+            class="text-blue-600 hover:text-blue-700 font-medium underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 rounded"
+            >Contact support</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <!-- Security Notice -->
+    <div class="mt-6 text-center">
+      <p class="text-xs text-slate-500 flex items-center justify-center gap-1">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            d="M5 9V7a5 5 0 0 1 10 0v2a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2zm8-2v2H7V7a3 3 0 0 1 6 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        Your login is secure and encrypted
+      </p>
+    </div>
+  </div>
+</section>

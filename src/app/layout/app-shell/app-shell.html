@@ -94,6 +94,27 @@
       <span class="text-xl font-semibold tracking-tight text-slate-900">
         Personal Expense Manager
       </span>
+
+      <div class="ml-auto flex items-center gap-4">
+        @if (authState.user(); as user) {
+          <div class="text-right">
+            <p class="text-sm font-medium text-slate-900">Hello, {{ user.username }}</p>
+            @if (user.email) {
+              <p class="text-xs text-slate-500">
+                {{ user.email }}
+              </p>
+            }
+          </div>
+        }
+
+        <button
+          type="button"
+          (click)="logout()"
+          class="rounded-lg bg-red-500 px-4 py-2 text-white transition duration-200 hover:bg-red-600"
+        >
+          Logout
+        </button>
+      </div>
     </header>
 
     <main class="full-height-custom p-6">

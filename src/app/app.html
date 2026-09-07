@@ -1,1 +1,5 @@
-<app-shell />
+@if (authState.isAuthenticated()) {
+  <app-shell />
+} @else {
+  <app-login-page />
+}
