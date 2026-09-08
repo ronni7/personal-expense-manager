@@ -23,14 +23,16 @@
           [value]="budgetsPageStore.selectedMonth()"
           (input)="onMonthChange($event)"
         />
-        <button
-          id="budgetsPageCreateBudgetButton"
-          mat-flat-button
-          type="button"
-          (click)="openBudgetDialog()"
-        >
-          Add budget
-        </button>
+        @if (authState.hasPermission(AUTH_PERMISSIONS.budgets.manage)) {
+          <button
+            id="budgetsPageCreateBudgetButton"
+            mat-flat-button
+            type="button"
+            (click)="openBudgetDialog()"
+          >
+            Add budget
+          </button>
+        }
       </div>
     </header>
 
@@ -134,14 +136,16 @@
                       <mat-icon>delete</mat-icon>
                     </button>
                   } @else {
-                    <button
-                      mat-icon-button
-                      type="button"
-                      aria-label="Add budget"
-                      (click)="openBudgetDialog()"
-                    >
-                      <mat-icon>add</mat-icon>
-                    </button>
+                    @if (authState.hasPermission(AUTH_PERMISSIONS.budgets.manage)) {
+                      <button
+                        mat-icon-button
+                        type="button"
+                        aria-label="Add budget"
+                        (click)="openBudgetDialog()"
+                      >
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    }
                   }
                 </div>
               </div>

@@ -2,14 +2,25 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './auth/auth.guard';
 import { LoginPage } from './auth/pages/login-page/login-page';
+import { ForbiddenPage } from './auth/pages/forbidden-page/forbidden-page/forbidden-page';
+import { permissionGuard } from './auth/auth-permission-guard';
+import { AppShell } from './layout/app-shell/app-shell';
+import { AUTH_PERMISSIONS } from './auth/auth.permissions';
 
 export const routes: Routes = [
   {
     path: 'login',
     component: LoginPage,
   },
+
+  {
+    path: 'forbidden',
+    component: ForbiddenPage,
+  },
+
   {
     path: '',
+    component: AppShell,
     canActivate: [authGuard],
     children: [
       {
@@ -17,6 +28,7 @@ export const routes: Routes = [
         pathMatch: 'full',
         redirectTo: 'dashboard',
       },
+
       {
         path: 'dashboard',
         loadComponent: () =>
@@ -24,6 +36,7 @@ export const routes: Routes = [
             (m) => m.DashboardPage,
           ),
       },
+
       {
         path: 'expenses',
         loadComponent: () =>
@@ -31,13 +44,16 @@ export const routes: Routes = [
             (m) => m.ExpensesPage,
           ),
       },
+
       {
         path: 'budgets',
+        canActivate: [permissionGuard(AUTH_PERMISSIONS.budgets.view)],
         loadChildren: () =>
           import('./features/budgets/budgets.routes').then((m) => m.BUDGETS_ROUTES),
       },
     ],
   },
+
   {
     path: '**',
     redirectTo: 'dashboard',

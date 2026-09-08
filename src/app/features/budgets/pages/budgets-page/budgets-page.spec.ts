@@ -5,6 +5,7 @@ import { beforeEach, describe, test, vi } from 'vitest';
 import { MatDialog } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
+import { AuthState } from '../../../../auth/auth.state';
 import { Category } from '../../../categories/model/category.model';
 import { BudgetDialogComponent } from '../../components/budget-dialog/budget-dialog';
 import { BudgetFormSubmit } from '../../model/budget-form-submit.model';
@@ -15,6 +16,9 @@ import { BudgetsPage } from './budgets-page';
 
 describe('BudgetsPage', () => {
   let fixture: ComponentFixture<BudgetsPage>;
+  const authStateMock = {
+    hasPermission: vi.fn(),
+  };
 
   const pageStoreMock = {
     selectedMonth: signal('2026-08'),
@@ -59,6 +63,8 @@ describe('BudgetsPage', () => {
       overBudget: false,
     },
   ]);
+
+  authStateMock.hasPermission = vi.fn().mockReturnValue(true);
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -96,6 +102,10 @@ describe('BudgetsPage', () => {
           {
             provide: BudgetsPageStore,
             useValue: pageStoreMock,
+          },
+          {
+            provide: AuthState,
+            useValue: authStateMock,
           },
         ],
       },

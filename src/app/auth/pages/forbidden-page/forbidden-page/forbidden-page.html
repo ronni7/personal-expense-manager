@@ -1,0 +1,93 @@
+<div class="min-h-screen bg-slate-100 px-4 py-10 text-slate-800">
+  <div class="mx-auto flex min-h-[calc(100vh-5rem)] max-w-2xl items-center justify-center">
+    <div
+      class="w-full overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/80"
+    >
+      <div
+        class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 px-6 py-5 text-white sm:px-8"
+      >
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <p class="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-300">
+              Security checkpoint
+            </p>
+            <h1 class="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">Access denied</h1>
+          </div>
+          <div
+            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              class="h-6 w-6 text-amber-300"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 3l7 3v5c0 4.2-2.7 8.1-7 10-4.3-1.9-7-5.8-7-10V6l7-3z" />
+              <path d="M9.5 11.5l1.8 1.8 3.2-4" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-8 sm:px-8 sm:py-10">
+        <div class="flex items-end justify-center gap-3 text-slate-900">
+          <span class="text-6xl font-black tracking-tight sm:text-7xl">403</span>
+          <span class="mb-2 text-xs font-semibold uppercase tracking-[0.28em] text-slate-500"
+            >Forbidden</span
+          >
+        </div>
+
+        <div
+          class="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800 shadow-sm shadow-rose-100/60"
+        >
+          <div class="flex items-start gap-3">
+            <div
+              class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-rose-100 text-lg"
+            >
+              🚫
+            </div>
+            <div>
+              <p class="font-semibold">The PEM police have blocked this route.</p>
+              <p class="mt-1 text-rose-700">
+                Looks like this page is not on the approved spending list.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p class="mt-6 text-center text-base leading-7 text-slate-600">
+          You do not have permission to view this area. Maybe the secret sauce is missing, or the
+          app is just being dramatic again.
+        </p>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <a
+            href="/"
+            class="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2"
+          >
+            Go to dashboard
+          </a>
+          <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2"
+            onclick="window.history.back()"
+          >
+            Go back
+          </button>
+        </div>
+
+        <div
+          class="mt-8 flex items-center justify-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-slate-400"
+        >
+          <span class="h-px w-10 bg-slate-200"></span>
+          <span>Not today</span>
+          <span class="h-px w-10 bg-slate-200"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

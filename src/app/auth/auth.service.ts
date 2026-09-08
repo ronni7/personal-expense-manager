@@ -41,7 +41,6 @@ export class AuthService {
       redirectUri: window.location.origin,
     });
   }
-
   private updateAuthenticatedState(): void {
     const token = this.keycloak.tokenParsed;
 
@@ -58,7 +57,9 @@ export class AuthService {
       lastName: token['family_name'] ?? null,
     };
 
-    this.authState.setAuthenticated(user);
+    const roles = this.keycloak.resourceAccess?.[keycloakConfig.clientId]?.roles ?? [];
+
+    this.authState.setAuthenticated(user, roles);
   }
 
   private registerKeycloakCallbacks(): void {

@@ -10,6 +10,8 @@ import { Budget } from '../../model/budget.model';
 import { BudgetDialogComponent } from '../../components/budget-dialog/budget-dialog';
 import { BudgetFormSubmit } from '../../model/budget-form-submit.model';
 import { BudgetsPageStore } from '../store/budgets-page-store';
+import { AuthState } from '../../../../auth/auth.state';
+import { AUTH_PERMISSIONS } from '../../../../auth/auth.permissions';
 
 @Component({
   selector: 'app-budgets-page',
@@ -29,6 +31,8 @@ import { BudgetsPageStore } from '../store/budgets-page-store';
 export class BudgetsPage {
   protected readonly budgetsPageStore = inject(BudgetsPageStore);
   readonly dialog = inject(MatDialog);
+  protected readonly authState = inject(AuthState);
+  protected readonly AUTH_PERMISSIONS = AUTH_PERMISSIONS;
 
   protected openBudgetDialog(budget?: Budget): void {
     const dialogRef = this.dialog.open(BudgetDialogComponent, {

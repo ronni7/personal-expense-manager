@@ -5,6 +5,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { AuthService } from '../../auth/auth.service';
 import { AuthState } from '../../auth/auth.state';
+import { AUTH_PERMISSIONS } from '../../auth/auth.permissions';
 
 @Component({
   selector: 'app-shell',
@@ -14,7 +15,7 @@ import { AuthState } from '../../auth/auth.state';
 })
 export class AppShell {
   protected readonly authState = inject(AuthState);
-
+  protected readonly AUTH_PERMISSIONS = AUTH_PERMISSIONS;
   private readonly authService = inject(AuthService);
 
   protected logout(): void {
