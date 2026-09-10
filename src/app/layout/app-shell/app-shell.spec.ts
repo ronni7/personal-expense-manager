@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { HttpClient } from '@angular/common/http';
 import { test, vi } from 'vitest';
 import { AuthState } from '../../auth/auth.state';
 import { AppShell } from './app-shell';
@@ -21,6 +22,10 @@ describe('AppShell', () => {
         {
           provide: AuthState,
           useValue: authStateMock,
+        },
+        {
+          provide: HttpClient,
+          useValue: {},
         },
       ],
     }).compileComponents();

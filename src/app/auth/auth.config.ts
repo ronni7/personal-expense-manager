@@ -5,3 +5,7 @@ export const keycloakConfig: KeycloakConfig = {
   realm: 'PEM',
   clientId: 'personal-expense-manager',
 };
+
+export const authConfig = {
+  protectedResourceUrls: ['http://localhost:8080/realms/PEM/protocol/openid-connect/userinfo'],
+} as const;

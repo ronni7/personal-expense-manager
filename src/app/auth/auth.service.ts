@@ -11,6 +11,7 @@ import type { AuthUser } from './auth.types';
 export class AuthService {
   private readonly keycloak = new Keycloak(keycloakConfig);
   private readonly authState = inject(AuthState);
+  private refreshInFlight: Promise<boolean> | null = null;
 
   async init(): Promise<boolean> {
     this.registerKeycloakCallbacks();
@@ -76,7 +77,39 @@ export class AuthService {
     };
 
     this.keycloak.onAuthRefreshError = () => {
-      this.authState.setAnonymous();
+      this.handleAuthenticationFailure();
     };
+  }
+
+  async getValidToken(): Promise<string | undefined> {
+    if (!this.keycloak.authenticated) {
+      return undefined;
+    }
+
+    try {
+      await this.refreshTokenIfNeeded();
+
+      return this.keycloak.token;
+    } catch (error) {
+      console.error('Failed to refresh access token', error);
+      this.handleAuthenticationFailure();
+
+      return undefined;
+    }
+  }
+
+  private refreshTokenIfNeeded(): Promise<boolean> {
+    if (!this.refreshInFlight) {
+      this.refreshInFlight = this.keycloak.updateToken(30).finally(() => {
+        this.refreshInFlight = null;
+      });
+    }
+
+    return this.refreshInFlight;
+  }
+
+  handleAuthenticationFailure(): void {
+    this.keycloak.clearToken();
+    this.authState.setAnonymous();
   }
 }

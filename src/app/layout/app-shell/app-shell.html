@@ -63,6 +63,20 @@
             <span>Expenses</span>
           </span>
         </a>
+        <button
+          type="button"
+          (click)="testUserInfo()"
+          class="rounded-lg bg-indigo-600 px-4 py-2 text-white"
+        >
+          Test UserInfo
+        </button>
+        <button
+          type="button"
+          (click)="testConcurrentUserInfo()"
+          class="rounded-lg bg-indigo-600 px-4 py-2 text-white"
+        >
+          Test Concurrent Requests
+        </button>
         @if (authState.hasPermission(AUTH_PERMISSIONS.budgets.view)) {
           <a
             mat-list-item
