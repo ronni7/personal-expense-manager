@@ -10,7 +10,7 @@ import { Budget } from '../../model/budget.model';
 import { BudgetDialogComponent } from '../../components/budget-dialog/budget-dialog';
 import { BudgetFormSubmit } from '../../model/budget-form-submit.model';
 import { BudgetsPageStore } from '../store/budgets-page-store';
-import { AuthState } from '../../../../auth/auth.state';
+import { AuthState } from '../../../../auth/auth-state/auth.state';
 import { AUTH_PERMISSIONS } from '../../../../auth/auth.permissions';
 
 @Component({

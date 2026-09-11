@@ -12,13 +12,20 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './auth/services/auth.service';
 import { authInterceptor } from './auth/auth.interceptor';
+import { KEYCLOAK } from './auth/services/keycloak.token';
+import { keycloakConfig } from './auth/auth.config';
+import Keycloak from 'keycloak-js';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    {
+      provide: KEYCLOAK,
+      useFactory: () => new Keycloak(keycloakConfig),
+    },
 
     provideAppInitializer(() => {
       const authService = inject(AuthService);

@@ -3,8 +3,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { HttpClient } from '@angular/common/http';
 import { test, vi } from 'vitest';
-import { AuthState } from '../../auth/auth.state';
+import { AuthState } from '../../auth/auth-state/auth.state';
 import { AppShell } from './app-shell';
+import { KEYCLOAK } from '../../auth/services/keycloak.token';
+import Keycloak from 'keycloak-js';
+import { keycloakConfig } from '../../auth/auth.config';
 
 describe('AppShell', () => {
   let component: AppShell;
@@ -26,6 +29,10 @@ describe('AppShell', () => {
         {
           provide: HttpClient,
           useValue: {},
+        },
+        {
+          provide: KEYCLOAK,
+          useFactory: () => new Keycloak(keycloakConfig),
         },
       ],
     }).compileComponents();

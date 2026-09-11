@@ -1,15 +1,15 @@
 import { Injectable, inject } from '@angular/core';
-import Keycloak from 'keycloak-js';
 
-import { keycloakConfig } from './auth.config';
-import { AuthState } from './auth.state';
-import type { AuthUser } from './auth.types';
+import { keycloakConfig } from '../auth.config';
+import { AuthState } from '../auth-state/auth.state';
+import type { AuthUser } from '../auth.types';
+import { KEYCLOAK } from './keycloak.token';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly keycloak = new Keycloak(keycloakConfig);
+  private readonly keycloak = inject(KEYCLOAK);
   private readonly authState = inject(AuthState);
   private refreshInFlight: Promise<boolean> | null = null;
 

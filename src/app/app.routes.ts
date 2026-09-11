@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 
-import { authGuard } from './auth/auth.guard';
+import { authGuard } from './auth/guards/auth.guard';
 import { LoginPage } from './auth/pages/login-page/login-page';
 import { ForbiddenPage } from './auth/pages/forbidden-page/forbidden-page/forbidden-page';
-import { permissionGuard } from './auth/auth-permission-guard';
+import { permissionGuard } from './auth/guards/auth-permission-guard';
 import { AppShell } from './layout/app-shell/app-shell';
 import { AUTH_PERMISSIONS } from './auth/auth.permissions';
 

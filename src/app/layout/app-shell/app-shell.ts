@@ -3,8 +3,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
-import { AuthService } from '../../auth/auth.service';
-import { AuthState } from '../../auth/auth.state';
+import { AuthService } from '../../auth/services/auth.service';
+import { AuthState } from '../../auth/auth-state/auth.state';
 import { AUTH_PERMISSIONS } from '../../auth/auth.permissions';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin } from 'rxjs';

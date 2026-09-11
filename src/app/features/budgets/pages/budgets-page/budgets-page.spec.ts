@@ -5,7 +5,7 @@ import { beforeEach, describe, test, vi } from 'vitest';
 import { MatDialog } from '@angular/material/dialog';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
-import { AuthState } from '../../../../auth/auth.state';
+import { AuthState } from '../../../../auth/auth-state/auth.state';
 import { Category } from '../../../categories/model/category.model';
 import { BudgetDialogComponent } from '../../components/budget-dialog/budget-dialog';
 import { BudgetFormSubmit } from '../../model/budget-form-submit.model';
