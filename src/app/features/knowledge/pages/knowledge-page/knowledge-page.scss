@@ -1,0 +1,43 @@
+:host {
+  display: block;
+}
+
+progress,
+meter {
+  width: 100%;
+}
+
+input[type='range'] {
+  accent-color: #4f46e5;
+}
+
+figure,
+blockquote,
+q,
+address {
+  margin: 0;
+}
+
+address {
+  font-style: normal;
+}
+
+#lastListItem {
+  span {
+    width: 24px;
+  }
+}
+
+dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  border: none;
+  padding: 0;
+}
+
+dialog::backdrop {
+  background: rgba(2, 6, 23, 0.5);
+}

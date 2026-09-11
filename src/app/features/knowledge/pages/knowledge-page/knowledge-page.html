@@ -1,0 +1,662 @@
+<main
+  class="mx-auto max-w-7xl space-y-6 p-4 pb-8 sm:p-6"
+  aria-label="Personal finance knowledge base"
+>
+  <header class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="flex justify-end border-b border-slate-200 px-5 py-4">
+      <nav class="flex flex-wrap gap-2" aria-label="Knowledge base navigation">
+        <a
+          [routerLink]="[]"
+          fragment="articles"
+          class="rounded-full bg-slate-100 px-3 py-1.5 text-sm text-slate-700 transition hover:bg-slate-200"
+          (click)="scrollTo(articles)"
+        >
+          Featured articles
+        </a>
+        <a
+          [routerLink]="[]"
+          fragment="facts"
+          class="rounded-full bg-slate-100 px-3 py-1.5 text-sm text-slate-700 transition hover:bg-slate-200"
+          (click)="scrollTo(facts)"
+        >
+          Budget snapshot
+        </a>
+        <a
+          [routerLink]="[]"
+          fragment="glossary"
+          class="rounded-full bg-slate-100 px-3 py-1.5 text-sm text-slate-700 transition hover:bg-slate-200"
+          (click)="scrollTo(glossary)"
+        >
+          Glossary
+        </a>
+        <a
+          [routerLink]="[]"
+          fragment="faq"
+          class="rounded-full bg-slate-100 px-3 py-1.5 text-sm text-slate-700 transition hover:bg-slate-200"
+          (click)="scrollTo(faq)"
+        >
+          Questions
+        </a>
+        <a
+          [routerLink]="[]"
+          fragment="contact"
+          class="rounded-full bg-slate-100 px-3 py-1.5 text-sm text-slate-700 transition hover:bg-slate-200"
+          (click)="scrollTo(contact)"
+        >
+          Ask a question
+        </a>
+      </nav>
+    </div>
+
+    <div class="px-5 py-6 sm:px-6">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Practical notes</p>
+      <h1 class="mt-3 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+        Personal Finance Knowledge Base
+      </h1>
+      <p class="mt-3 max-w-3xl text-base leading-7 text-slate-600">
+        Practical notes on budgeting, saving, and everyday financial decisions for households that
+        want less stress and more clarity.
+      </p>
+    </div>
+  </header>
+
+  <div class="grid gap-6 xl:grid-cols-[minmax(0,1.8fr)_minmax(260px,0.9fr)]">
+    <div class="space-y-6">
+      <section
+        #articles
+        id="articles"
+        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        aria-labelledby="articles-title"
+      >
+        <header class="mb-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Editorial picks
+          </p>
+          <h2 id="articles-title" class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">
+            Featured articles
+          </h2>
+        </header>
+
+        <div class="grid gap-4 md:grid-cols-3">
+          <article class="flex h-full flex-col rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <header class="mb-3">
+              <p class="text-xs text-slate-500"><time datetime="2026-09-02">2 Sep 2026</time></p>
+              <h3 class="mt-1 text-lg font-semibold text-slate-900">
+                How to build a realistic monthly budget
+              </h3>
+            </header>
+            <p class="text-sm leading-6 text-slate-600">
+              Start by separating essentials, flexible spending, and goals so you can see where
+              money is moving before it disappears.
+            </p>
+            <footer class="mt-4 border-t border-slate-200 pt-3 text-xs text-slate-500">
+              <span>6 min read</span>
+            </footer>
+            <a
+              href="https://www.consumerfinance.gov/consumer-tools/money-as-you-grow"
+              target="_blank"
+              rel="noreferrer"
+              class="mt-4 text-sm font-medium text-indigo-700 hover:text-indigo-900"
+            >
+              Read the guide
+            </a>
+          </article>
+
+          <article class="flex h-full flex-col rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <header class="mb-3">
+              <p class="text-xs text-slate-500"><time datetime="2026-08-18">18 Aug 2026</time></p>
+              <h3 class="mt-1 text-lg font-semibold text-slate-900">
+                Emergency fund basics for households
+              </h3>
+            </header>
+            <p class="text-sm leading-6 text-slate-600">
+              A small, predictable cushion can reduce stress when irregular costs appear, from car
+              repairs to medical bills.
+            </p>
+            <footer class="mt-4 border-t border-slate-200 pt-3 text-xs text-slate-500">
+              <span>4 min read</span>
+            </footer>
+            <a
+              href="https://www.fdic.gov/consumer-resource-center"
+              target="_blank"
+              rel="noreferrer"
+              class="mt-4 text-sm font-medium text-indigo-700 hover:text-indigo-900"
+            >
+              Read more
+            </a>
+          </article>
+
+          <article class="flex h-full flex-col rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <header class="mb-3">
+              <p class="text-xs text-slate-500"><time datetime="2026-08-04">4 Aug 2026</time></p>
+              <h3 class="mt-1 text-lg font-semibold text-slate-900">
+                What to review before the next paycheck
+              </h3>
+            </header>
+            <p class="text-sm leading-6 text-slate-600">
+              A short weekly check-in is often enough to catch overspending, missed subscriptions,
+              and upcoming bills.
+            </p>
+            <footer class="mt-4 border-t border-slate-200 pt-3 text-xs text-slate-500">
+              <span>5 min read</span>
+            </footer>
+            <a
+              href="https://www.benefits.gov/benefits/benefits-faqs"
+              target="_blank"
+              rel="noreferrer"
+              class="mt-4 text-sm font-medium text-indigo-700 hover:text-indigo-900"
+            >
+              Explore the checklist
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section
+        #facts
+        id="facts"
+        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        aria-labelledby="facts-title"
+      >
+        <header class="mb-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Illustrative examples
+          </p>
+          <h2 id="facts-title" class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">
+            Illustrative budget snapshot
+          </h2>
+          <p class="mt-2 text-sm leading-6 text-slate-600">
+            These values are provided as illustrative examples only and are not intended to
+            represent real household statistics.
+          </p>
+        </header>
+
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <h3 class="text-sm font-medium uppercase tracking-[0.12em] text-slate-500">
+              Savings target
+            </h3>
+            <p class="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
+              <data value="1200">1,200 PLN</data>
+            </p>
+            <p class="mt-2 text-sm text-slate-600">Monthly allocation</p>
+          </div>
+
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <h3 class="text-sm font-medium uppercase tracking-[0.12em] text-slate-500">
+              Budget health
+            </h3>
+            <p class="mt-3 text-3xl font-semibold tracking-tight text-slate-900">72%</p>
+            <p class="mt-2 text-sm text-slate-600">Healthy plan coverage</p>
+          </div>
+
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <h3 class="text-sm font-medium uppercase tracking-[0.12em] text-slate-500">
+              Planned vs actual
+            </h3>
+            <p class="mt-3 text-3xl font-semibold tracking-tight text-slate-900">
+              <mark>+4.2%</mark>
+            </p>
+            <p class="mt-2 text-sm text-slate-600">Difference after review</p>
+          </div>
+        </div>
+
+        <div class="mt-6 grid gap-4">
+          <figure class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <progress value="72" max="100" class="block h-3 w-full accent-indigo-600">72%</progress>
+            <figcaption class="mt-3 text-sm leading-6 text-slate-600">
+              Emergency fund progress for the month. The value is illustrative.
+            </figcaption>
+          </figure>
+
+          <figure class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <meter
+              min="0"
+              max="100"
+              low="40"
+              high="80"
+              optimum="70"
+              value="68"
+              class="block h-3 w-full"
+            >
+              68% of target
+            </meter>
+            <figcaption class="mt-3 text-sm leading-6 text-slate-600">
+              Budget health meter for essential living costs versus planned spending.
+            </figcaption>
+          </figure>
+
+          <div class="overflow-hidden rounded-xl border border-slate-200">
+            <table
+              class="min-w-full divide-y divide-slate-200 bg-white text-left text-sm text-slate-700"
+              aria-label="Sample monthly budget allocation"
+            >
+              <caption class="bg-slate-50 px-4 py-3 text-left text-sm font-medium text-slate-700">
+                Example monthly household allocation
+              </caption>
+              <thead class="bg-slate-50 text-xs uppercase tracking-[0.12em] text-slate-500">
+                <tr>
+                  <th scope="col" class="px-4 py-3 font-semibold">Category</th>
+                  <th scope="col" class="px-4 py-3 font-semibold">Planned</th>
+                  <th scope="col" class="px-4 py-3 font-semibold">Actual</th>
+                  <th scope="col" class="px-4 py-3 font-semibold">Difference</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                @for (row of budgetRows; track $index) {
+                  <tr>
+                    <td class="px-4 py-3">{{ row.category }}</td>
+                    <td class="px-4 py-3">
+                      <input
+                        data-field="planned"
+                        [id]="'planned' + row.category"
+                        [name]="'planned' + row.category"
+                        [(ngModel)]="row.planned"
+                        class="rounded border border-slate-200 bg-white px-2 py-1 text-sm text-slate-900"
+                      />
+                      <label [for]="'planned' + row.category">{{ ' ' + selectedCurrency }}</label>
+                    </td>
+                    <td class="px-4 py-3">
+                      <input
+                        data-field="actual"
+                        [id]="'actual' + row.category"
+                        [name]="'actual' + row.category"
+                        [(ngModel)]="row.actual"
+                        class="rounded border border-slate-200 bg-white px-2 py-1 text-sm text-slate-900"
+                      />
+                      <label [for]="'actual' + row.category">{{ ' ' + selectedCurrency }}</label>
+                    </td>
+                    <td class="px-4 py-3">{{ getDifference(row) | currency: 'PLN' }}</td>
+                  </tr>
+                }
+              </tbody>
+              <tfoot class="bg-slate-50 font-semibold text-slate-900">
+                <tr>
+                  <th scope="row" class="px-4 py-3 text-left">Total</th>
+                  <td class="px-4 py-3">{{ getColumnTotal('planned') | currency: 'PLN' }}</td>
+                  <td class="px-4 py-3">{{ getColumnTotal('actual') | currency: 'PLN' }}</td>
+                  <td class="px-4 py-3">{{ getColumnTotal('difference') | currency: 'PLN' }}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section
+        #glossary
+        id="glossary"
+        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        aria-labelledby="glossary-title"
+      >
+        <header class="mb-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Reference</p>
+          <h2 id="glossary-title" class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">
+            Financial glossary
+          </h2>
+        </header>
+
+        <dl class="space-y-4">
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <dt class="text-base font-semibold text-slate-900">Fixed expense</dt>
+            <dd class="mt-1 text-sm leading-6 text-slate-600">
+              A recurring cost that is usually stable, such as rent, internet, or insurance.
+            </dd>
+          </div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <dt class="text-base font-semibold text-slate-900">Variable expense</dt>
+            <dd class="mt-1 text-sm leading-6 text-slate-600">
+              A cost that changes month to month, such as groceries, fuel, or entertainment.
+            </dd>
+          </div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <dt class="text-base font-semibold text-slate-900">Emergency fund</dt>
+            <dd class="mt-1 text-sm leading-6 text-slate-600">
+              Cash set aside to cover sudden costs without needing to take on debt.
+            </dd>
+          </div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <dt class="text-base font-semibold text-slate-900">Savings rate</dt>
+            <dd class="mt-1 text-sm leading-6 text-slate-600">
+              The portion of income you save or invest after taxes and essential spending.
+            </dd>
+          </div>
+          <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <dt class="text-base font-semibold text-slate-900">Discretionary spending</dt>
+            <dd class="mt-1 text-sm leading-6 text-slate-600">
+              Flexible spending on wants rather than needs, which is often the easiest category to
+              review.
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section
+        #faq
+        id="faq"
+        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        aria-labelledby="faq-title"
+      >
+        <header class="mb-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Quick answers
+          </p>
+          <h2 id="faq-title" class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">
+            Why this matters
+          </h2>
+        </header>
+
+        <div class="space-y-3">
+          <details class="rounded-xl border border-slate-200 bg-slate-50 p-4" open>
+            <summary class="cursor-pointer font-medium text-slate-900">
+              Why track irregular expenses?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-600">
+              Small, uneven costs can accumulate quickly. Tracking them helps you plan for the
+              months when they are more common.
+            </p>
+          </details>
+
+          <details class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <summary class="cursor-pointer font-medium text-slate-900">
+              Why separate fixed and variable costs?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-600">
+              Fixed costs are easier to predict, while variable costs can reveal hidden leakage in
+              the budget. Separating them makes review more actionable.
+            </p>
+          </details>
+
+          <details class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <summary class="cursor-pointer font-medium text-slate-900">
+              Why review a budget monthly?
+            </summary>
+            <p class="mt-3 text-sm leading-6 text-slate-600">
+              Life changes, income shifts, and seasonal spending rise and fall. A monthly check-in
+              helps you course-correct before small issues become bigger ones.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section
+        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        aria-labelledby="quotes-title"
+      >
+        <header class="mb-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Perspective
+          </p>
+          <h2 id="quotes-title" class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">
+            Budgeting reminders
+          </h2>
+        </header>
+
+        <div class="grid gap-4 md:grid-cols-2">
+          <blockquote class="rounded-xl border border-indigo-100 bg-indigo-50 p-4 text-slate-700">
+            <p class="text-base leading-7">
+              Money is a tool. It can build a life, or it can become a source of anxiety.
+            </p>
+            <footer class="mt-3 text-xs font-medium uppercase tracking-[0.12em] text-slate-500">
+              Household reminder
+            </footer>
+          </blockquote>
+
+          <blockquote class="rounded-xl border border-indigo-100 bg-indigo-50 p-4 text-slate-700">
+            <p class="text-base leading-7">
+              A budget is not a punishment. It is a simple system for making choices visible.
+            </p>
+            <footer class="mt-3 text-xs font-medium uppercase tracking-[0.12em] text-slate-500">
+              Original reflection
+            </footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <section
+        #contact
+        id="contact"
+        class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+        aria-labelledby="contact-title"
+      >
+        <header class="mb-4">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Support</p>
+          <h2 id="contact-title" class="mt-2 text-2xl font-semibold tracking-tight text-slate-900">
+            Ask a question
+          </h2>
+        </header>
+
+        <form
+          #budgetForm
+          class="space-y-4"
+          method="post"
+          (submit)="onSubmit(budgetForm, $event, confirmationDialog)"
+        >
+          <fieldset class="rounded-xl border border-slate-200 p-4">
+            <legend class="px-2 text-sm font-medium text-slate-700">Budgeting desk</legend>
+
+            <div class="grid gap-4 md:grid-cols-2">
+              <div class="grid gap-2">
+                <label for="full-name" class="text-sm font-medium text-slate-700">Full name</label>
+                <input
+                  id="full-name"
+                  name="full-name"
+                  type="text"
+                  autocomplete="name"
+                  required
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                />
+              </div>
+
+              <div class="grid gap-2">
+                <label for="email" class="text-sm font-medium text-slate-700">Email</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                />
+              </div>
+            </div>
+
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div class="grid gap-2">
+                <label for="topic" class="text-sm font-medium text-slate-700">Topic</label>
+                <input
+                  id="topic"
+                  name="topic"
+                  type="text"
+                  list="topic-list"
+                  placeholder="Budget review, savings, debt, other"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                />
+                <datalist id="topic-list">
+                  <option value="Budget review"></option>
+                  <option value="Savings habit"></option>
+                  <option value="Debt planning"></option>
+                  <option value="Household spending"></option>
+                </datalist>
+              </div>
+
+              <div class="grid gap-2">
+                <label for="household-income" class="text-sm font-medium text-slate-700"
+                  >Household monthly income</label
+                >
+                <input
+                  id="household-income"
+                  name="household-income"
+                  type="number"
+                  min="0"
+                  step="50"
+                  placeholder="0 PLN"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                />
+              </div>
+            </div>
+
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <div class="grid gap-2">
+                <label for="budget-focus" class="text-sm font-medium text-slate-700"
+                  >Budget focus</label
+                >
+                <select
+                  id="budget-focus"
+                  name="budget-focus"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                >
+                  <option value="">Select a focus</option>
+                  <option value="expenses">Expense tracking</option>
+                  <option value="savings">Savings plan</option>
+                  <option value="debt">Debt reduction</option>
+                  <option value="household">Household planning</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-4 grid gap-2">
+              <label for="budget-priority" class="text-sm font-medium text-slate-700">
+                Planning flexibility target
+              </label>
+              <input
+                id="budget-priority"
+                name="budget-priority"
+                type="range"
+                min="0"
+                max="100"
+                value="65"
+                (input)="onRangeChange($event)"
+                class="w-full accent-indigo-600"
+              />
+              <output
+                for="budget-priority"
+                class="inline-flex w-fit rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-800"
+              >
+                {{ budgetCoverage }}%
+              </output>
+            </div>
+
+            <div class="mt-4 grid gap-2">
+              <label for="question" class="text-sm font-medium text-slate-700">Your question</label>
+              <textarea
+                id="question"
+                name="question"
+                minlength="20"
+                maxlength="500"
+                placeholder="Tell us what you are trying to plan for."
+                required
+                class="min-h-32 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              ></textarea>
+            </div>
+          </fieldset>
+
+          <button
+            type="submit"
+            class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          >
+            Send inquiry
+          </button>
+        </form>
+        <dialog #confirmationDialog class="m-0 p-0">
+          <form
+            method="dialog"
+            class="rounded-2xl bg-white p-6 shadow-lg text-slate-900 w-full max-w-md mx-auto space-y-4"
+          >
+            <div class="flex items-start gap-3">
+              <span
+                class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-indigo-50 text-indigo-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+              <div>
+                <h2 class="text-lg font-semibold">Thank you</h2>
+                <p class="mt-1 text-sm text-slate-600">
+                  This is a demo feature. The form is not connected to a backend yet ;)
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-2 flex justify-end">
+              <button
+                type="submit"
+                class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+              >
+                Close
+              </button>
+            </div>
+          </form>
+        </dialog>
+      </section>
+    </div>
+
+    <aside class="space-y-6" aria-label="Quick guidance">
+      <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 class="text-xl font-semibold tracking-tight text-slate-900">Quick habits</h2>
+        <ul class="mt-4 space-y-3 text-sm leading-6 text-slate-600">
+          <li class="flex gap-3">
+            <span
+              class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700"
+              >✓</span
+            >
+            Review fixed spending before non-essential purchases.
+          </li>
+          <li class="flex gap-3">
+            <span
+              class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700"
+              >✓</span
+            >
+            Keep a small buffer for irregular expenses.
+          </li>
+          <li class="flex gap-3">
+            <span
+              class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700"
+              >✓</span
+            >
+            Set a monthly target for emergency fund savings.
+          </li>
+          <li id="lastListItem" class="flex gap-3">
+            <span
+              class="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700"
+              >✓</span
+            >
+            Check discretionary categories weekly before the next paycheck.
+          </li>
+        </ul>
+      </section>
+
+      <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 class="text-xl font-semibold tracking-tight text-slate-900">Useful note</h2>
+        <p class="mt-3 text-sm leading-6 text-slate-600">
+          <small>Tip:</small> If a category is hard to forecast, reduce the number of decisions you
+          make each month by setting a cap and reviewing it weekly.
+        </p>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="border-t border-slate-200 pt-5 text-sm text-slate-600">
+    <p>
+      <strong class="font-semibold text-slate-900">Personal Finance Knowledge Base</strong> is a
+      practical reference for better household decisions.
+    </p>
+    <p class="mt-2">
+      Feedback can be shared through the
+      <a [routerLink]="[]" fragment="#contact" class="text-indigo-700 hover:text-indigo-900"
+        >question form</a
+      >.
+    </p>
+  </footer>
+</main>

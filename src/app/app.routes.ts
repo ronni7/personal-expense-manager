@@ -51,6 +51,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/budgets/budgets.routes').then((m) => m.BUDGETS_ROUTES),
       },
+
+      {
+        path: 'knowledge',
+        loadChildren: () =>
+          import('./features/knowledge/knowledge.routes').then((m) => m.KNOWLEDGE_ROUTES),
+      },
     ],
   },
 
