@@ -13,7 +13,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { AuthService } from './auth/services/auth.service';
-import { authInterceptor } from './auth/auth.interceptor';
+import { authInterceptor } from './auth/interceptor/auth.interceptor';
 import { KEYCLOAK } from './auth/services/keycloak.token';
 import { keycloakConfig } from './auth/auth.config';
 import Keycloak from 'keycloak-js';

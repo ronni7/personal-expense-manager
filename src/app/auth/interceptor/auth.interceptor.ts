@@ -3,13 +3,13 @@ import { inject } from '@angular/core';
 
 import { catchError, from, switchMap, throwError } from 'rxjs';
 
-import { AuthService } from './services/auth.service';
-import { authConfig } from './auth.config';
+import { AuthService } from '../services/auth.service';
+import { authConfig } from '../auth.config';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
 
-  // TODO
+  // TODO protected resource URL will be adjusted when API is enabled
   const isProtectedResource = authConfig.protectedResourceUrls.some((url) =>
     req.url.startsWith(url),
   );
