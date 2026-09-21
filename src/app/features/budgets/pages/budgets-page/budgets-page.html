@@ -23,16 +23,16 @@
           [value]="budgetsPageStore.selectedMonth()"
           (input)="onMonthChange($event)"
         />
-        @if (authState.hasPermission(AUTH_PERMISSIONS.budgets.manage)) {
-          <button
-            id="budgetsPageCreateBudgetButton"
-            mat-flat-button
-            type="button"
-            (click)="openBudgetDialog()"
-          >
-            Add budget
-          </button>
-        }
+        <!-- permission check off for presentational purposes @if (authState.hasPermission(AUTH_PERMISSIONS.budgets.manage)) { -->
+        <button
+          id="budgetsPageCreateBudgetButton"
+          mat-flat-button
+          type="button"
+          (click)="openBudgetDialog()"
+        >
+          Add budget
+        </button>
+        <!-- } -->
       </div>
     </header>
 

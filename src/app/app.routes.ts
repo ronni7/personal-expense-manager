@@ -1,11 +1,9 @@
 import { Routes } from '@angular/router';
 
 import { authGuard } from './auth/guards/auth.guard';
-import { LoginPage } from './auth/pages/login-page/login-page';
 import { ForbiddenPage } from './auth/pages/forbidden-page/forbidden-page/forbidden-page';
-import { permissionGuard } from './auth/guards/auth-permission-guard';
+import { LoginPage } from './auth/pages/login-page/login-page';
 import { AppShell } from './layout/app-shell/app-shell';
-import { AUTH_PERMISSIONS } from './auth/auth.permissions';
 
 export const routes: Routes = [
   {
@@ -47,7 +45,7 @@ export const routes: Routes = [
 
       {
         path: 'budgets',
-        canActivate: [permissionGuard(AUTH_PERMISSIONS.budgets.view)],
+        // permission check off for presentational purposes canActivate: [permissionGuard(AUTH_PERMISSIONS.budgets.view)],
         loadChildren: () =>
           import('./features/budgets/budgets.routes').then((m) => m.BUDGETS_ROUTES),
       },

@@ -77,27 +77,27 @@
         >
           Test Concurrent Requests
         </button>
-        @if (authState.hasPermission(AUTH_PERMISSIONS.budgets.view)) {
-          <a
-            mat-list-item
-            routerLink="/budgets"
-            routerLinkActive="selected"
-            #budgetsLink="routerLinkActive"
-            [attr.aria-current]="budgetsLink.isActive ? 'page' : null"
-            class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-          >
-            <span class="flex items-center gap-2 text-left">
-              <span
-                aria-hidden="true"
-                class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-xs font-semibold text-slate-500 transition-colors group-hover:bg-slate-200 group-hover:text-slate-700"
-              >
-                B
-              </span>
-
-              <span>Budgets</span>
+        <!--permission check off for presentational purposes @if (authState.hasPermission(AUTH_PERMISSIONS.budgets.view)) { -->
+        <a
+          mat-list-item
+          routerLink="/budgets"
+          routerLinkActive="selected"
+          #budgetsLink="routerLinkActive"
+          [attr.aria-current]="budgetsLink.isActive ? 'page' : null"
+          class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-600 transition-all duration-200 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+        >
+          <span class="flex items-center gap-2 text-left">
+            <span
+              aria-hidden="true"
+              class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-xs font-semibold text-slate-500 transition-colors group-hover:bg-slate-200 group-hover:text-slate-700"
+            >
+              B
             </span>
-          </a>
-        }
+
+            <span>Budgets</span>
+          </span>
+        </a>
+        <!-- } -->
 
         <a
           mat-list-item
