@@ -6,50 +6,36 @@ import { pipe, switchMap, tap } from 'rxjs';
 import { Category } from '../model/category.model';
 
 import { CategoriesApiService } from '../api/category-api.service';
+import { withLifecycleState } from '../../../shared/call-state/lifecycle-state.feature';
 
 interface CategoriesState {
   categories: Category[];
-  loading: boolean;
-  error: string | null;
-  loaded: boolean;
 }
 
 const initialState: CategoriesState = {
   categories: [],
-  loading: false,
-  error: null,
-  loaded: false,
 };
 
 export const CategoriesStore = signalStore(
   { providedIn: 'root' },
 
   withState(initialState),
-
+  withLifecycleState(),
   withMethods((store, categoriesApi = inject(CategoriesApiService)) => ({
     loadCategories: rxMethod<void>(
       pipe(
         tap(() => {
-          patchState(store, {
-            loading: true,
-            error: null,
-          });
+          store.setLoadingState();
         }),
         switchMap(() => categoriesApi.getCategories()),
         tapResponse({
           next: (categories) => {
             patchState(store, {
               categories,
-              loading: false,
-              loaded: true,
             });
+            store.setLoadedState();
           },
-          error: () => {
-            patchState(store, {
-              loading: false,
-              error: 'Failed to load categories.',
-            });
-          },
+          error: () => store.setNotLoadingErrorState('Failed to load categories.'),
         }),
       ),
     ),

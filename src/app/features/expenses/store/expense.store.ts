@@ -8,34 +8,29 @@ import { tapResponse } from '@ngrx/operators';
 import { CreateExpenseRequest } from '../api/create-expense-request.model';
 import { mapExpenseDtoToExpense } from '../api/expense.mapper';
 import { UpdateExpenseRequest } from '../api/update-expense-request.model';
+import { withLifecycleState } from '../../../shared/call-state/lifecycle-state.feature';
 
 interface ExpensesState {
   expenses: Expense[];
-  loading: boolean;
   creating: boolean;
-  error: string | null;
   createError: string | null;
   updating: boolean;
   updateError: string | null;
-  loaded: boolean;
 }
 
 const initialState: ExpensesState = {
   expenses: [] as Expense[],
-  loading: false,
   creating: false,
-  error: null,
   createError: null,
   updating: false,
   updateError: null,
-  loaded: false,
 };
 
 export const ExpensesStore = signalStore(
   { providedIn: 'root' },
 
   withState(initialState),
-
+  withLifecycleState(),
   withComputed(({ expenses }) => ({
     expenseCount: computed(() => expenses().length),
 
@@ -64,26 +59,17 @@ export const ExpensesStore = signalStore(
     loadExpenses: rxMethod<void>(
       pipe(
         tap(() => {
-          patchState(store, {
-            loading: true,
-            error: null,
-          });
+          store.setLoadingState();
         }),
         switchMap(() => expensesApi.getExpenses()),
         tapResponse({
           next: (expenses) => {
             patchState(store, {
               expenses,
-              loading: false,
-              loaded: true,
             });
+            store.setLoadedState();
           },
-          error: () => {
-            patchState(store, {
-              loading: false,
-              error: 'Failed to load expenses.',
-            });
-          },
+          error: () => store.setNotLoadingErrorState('Failed to load expenses.'),
         }),
       ),
     ),
