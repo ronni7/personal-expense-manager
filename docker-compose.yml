@@ -1,0 +1,59 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.7.3
+    command: start-dev --import-realm
+
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: 'true'
+
+    ports:
+      - '127.0.0.1:8080:8080'
+
+    volumes:
+      - ./docker/keycloak:/opt/keycloak/data/import
+
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          "{ printf 'HEAD /health/ready HTTP/1.0\r\n\r\n' >&0; grep 'HTTP/1.0 200'; } 0<>/dev/tcp/127.0.0.1/9000",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  keycloak-init:
+    image: quay.io/keycloak/keycloak:26.7.3
+
+    entrypoint:
+      - /bin/bash
+      - /scripts/init-keycloak.sh
+
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      REALM: PEM
+
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+
+      DEMO_USERNAME: demo
+      DEMO_PASSWORD: demo
+      DEMO_EMAIL: demo@example.com
+
+    volumes:
+      - ./docker/keycloak/init-keycloak.sh:/scripts/init-keycloak.sh:ro
+
+    depends_on:
+      keycloak:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - '127.0.0.1:4200:80'
