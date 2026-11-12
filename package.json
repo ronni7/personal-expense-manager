@@ -12,7 +12,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "spellcheck:commit": "cspell --no-progress",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
   },
   "lint-staged": {
     "*.ts": [
@@ -63,7 +67,9 @@
     "@angular/compiler-cli": "20.3.35",
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.2.0",
+    "@playwright/test": "1.65.0",
     "@types/jasmine": "~5.1.0",
+    "@types/node": "^26.6.6",
     "angular-eslint": "20.7.0",
     "cspell": "^10.0.1",
     "eslint": "^9.39.1",
